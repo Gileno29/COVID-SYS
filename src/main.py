@@ -1,9 +1,10 @@
-#from Paciente import Paciente
-from GerenciaServices import GerenciaServices
+from TratarDados.timer.Timer import Timer
 
 
 class main:
+    t = Timer()
+    t.start()
 
-    service1 = GerenciaServices()
-    dados = service1.get_dados_service()
-    service1.get_info(dados)
+    for x in range(20):
+        # print(t.dados)
+        print(x)
