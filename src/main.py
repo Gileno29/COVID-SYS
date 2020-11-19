@@ -6,5 +6,4 @@ class main:
 
     service1 = GerenciaServices()
     dados = service1.get_dados_service()
-    # print(dados)
     service1.get_info(dados)
