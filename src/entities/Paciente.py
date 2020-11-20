@@ -8,6 +8,7 @@ class Paciente:
     def __init__(self):
         self._source_id = ''
         self._idade = ''
+        self._sexo = ''
         self._sintomas = []
         self._municipio = ''
         self._estado = ''
