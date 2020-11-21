@@ -1,7 +1,5 @@
 __author___ = "Gileno Cordeiro Duarte"
 
-from Endereco import Endereco
-
 
 class Paciente:
 
@@ -10,15 +8,13 @@ class Paciente:
         self._idade = ''
         self._sexo = ''
         self._sintomas = []
-        self._municipio = ''
-        self._estado = ''
-        self._endereco = Endereco()
+        self._endereco = {}
 
-    def set_source_id(self, nome):
-        self._nome = nome
+    def set_source_id(self, source_id):
+        self._source_id = source_id
 
     def get_source_id(self):
-        return self._nome
+        return self._source_id
 
     def set_idade(self, idade):
         self._idade = idade
@@ -37,3 +33,9 @@ class Paciente:
 
     def get_endereco(self):
         return self._endereco
+
+    def set_sexo(self, sexo):
+        self._sexo = sexo
+
+    def get_sexo(self):
+        return self._sexo
