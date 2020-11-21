@@ -34,6 +34,7 @@ class AuxPersistir():
             paciente.set_idade(dados_tratados[x]['idade'])
             paciente.set_source_id(dados_tratados[x]['id'])
             paciente.set_sexo(dados_tratados[x]['sexo'])
+            paciente.set_sintomas(dados_tratados[x]['sintomas'])
 
             self.insert_into_paciente(paciente)
             # print(paciente)
@@ -42,7 +43,7 @@ class AuxPersistir():
             # break
 
     def insert_into_paciente(self, paciente=Paciente()):
-        query_create = "CREATE TABLE IF NOT EXISTS paciente(id int(11) AUTO_INCREMENT NOT NULL ,source_id varchar(20)NOT NULL,idade int(11), sexo VARCHAR(12), endereco int(12), PRIMARY KEY(id), FOREIGN KEY (endereco) REFERENCES endereco(id));"
+        #query_create = "CREATE TABLE IF NOT EXISTS paciente(id int(11) AUTO_INCREMENT NOT NULL ,source_id varchar(20)NOT NULL,idade int(11), sexo VARCHAR(12), endereco int(12), PRIMARY KEY(id), FOREIGN KEY (endereco) REFERENCES endereco(id));"
         cursor = self._con.cursor()
         query_insert = "INSERT INTO paciente(municipio, estado) VALUES(%s,%s,%s);"
         sourc = paciente.get_source_id()

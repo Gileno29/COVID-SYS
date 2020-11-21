@@ -7,8 +7,9 @@ class Paciente:
         self._source_id = ''
         self._idade = ''
         self._sexo = ''
-        self._sintomas = []
+        self._sintomas = {}
         self._endereco = {}
+        self._teste = {}
 
     def set_source_id(self, source_id):
         self._source_id = source_id
@@ -23,7 +24,7 @@ class Paciente:
         return self._idade
 
     def set_sintomas(self, sintomas):
-        self._sintomas.append(sintomas)
+        self._sintomas = sintomas
 
     def get_sintomas(self):
         return self._sintomas
@@ -39,3 +40,9 @@ class Paciente:
 
     def get_sexo(self):
         return self._sexo
+
+    def set_resultado_teste(self, resultado):
+        self._resultado = resultado
+
+    def get_resultado_teste(self):
+        return self._resultado
