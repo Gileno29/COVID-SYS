@@ -74,15 +74,15 @@ class AuxPersistir():
         endereco = paciente.get_endereco()
 
         for x in range(len(endereco)):
-            print('PRINT DO ENDERECO ', endereco['estado'])
+            #print('PRINT DO ENDERECO ', endereco['estado'])
             municipio = endereco['municipio']
             estado = endereco['estado']
             val = (municipio, estado)
-            print('RESULTADO DE VALL', val)
+            #print('RESULTADO DE VALL ENDERECO', val)
             cursor.execute(query_insert, val)
 
             last_id = cursor.execute(query_last_id)
-            print('ESSE É O PRINT DO LAST ID', last_id)
+            #print('ESSE É O PRINT DO LAST ID', last_id)
 
             if(last_id):
                 print('ENDERECO INSERIDO COM SUCESSO!!!')
@@ -99,8 +99,8 @@ class AuxPersistir():
 
     def insert_into_teste(self, paciente=Paciente()):
         cursor = self._con.cursor(buffered=True)
-        query_insert = "INSERT INTO teste(data_teste, data_notificacao,resultado) VALUES(%s,%s,%s);"
-        query_last_id = "SELECT LAST_INSERT_ID();"
+        query_insert = """INSERT INTO teste(data_teste, data_notificacao, resultado) VALUES(%s,%s,%s)"""
+        query_last_id = """SELECT LAST_INSERT_ID();"""
 
         teste = paciente.get_resultado_teste()
 
@@ -109,9 +109,16 @@ class AuxPersistir():
             data_notificacao = teste['data_notificacao']
             resultado = teste['resultado']
             val = (data_teste, data_notificacao, resultado)
-            rows = cursor.execute(query_insert)
-            last_id = cursor.execute(query_last_id, val)
-            if(last_id):
+
+           #print('ESSE É O VAL DE TESTE', val)
+
+            cursor.execute(query_insert, val)
+            #cursor.execute("create table debug(teste varchar(15));")
+            last_id = cursor.execute(query_last_id)
+            self._con.commit()
+            resultado = cursor.fetchone()
+            print('ESSE É O LAST ID', last_id)
+            if(resultado):
                 print('TESTE INSERIDO COM SUCESSO!!!')
                 return last_id
             else:
