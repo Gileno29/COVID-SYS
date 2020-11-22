@@ -35,6 +35,7 @@ class AuxPersistir():
             paciente.set_source_id(dados_tratados[x]['id'])
             paciente.set_sexo(dados_tratados[x]['sexo'])
             paciente.set_sintomas(dados_tratados[x]['sintomas'])
+            paciente.set_resultado_teste(dados_tratados[x]['teste'])
 
             self.insert_into_paciente(paciente)
             # print(paciente)
@@ -43,40 +44,79 @@ class AuxPersistir():
             # break
 
     def insert_into_paciente(self, paciente=Paciente()):
-        #query_create = "CREATE TABLE IF NOT EXISTS paciente(id int(11) AUTO_INCREMENT NOT NULL ,source_id varchar(20)NOT NULL,idade int(11), sexo VARCHAR(12), endereco int(12), PRIMARY KEY(id), FOREIGN KEY (endereco) REFERENCES endereco(id));"
-        cursor = self._con.cursor()
-        query_insert = "INSERT INTO paciente(municipio, estado) VALUES(%s,%s,%s);"
+        # query_create = "CREATE TABLE IF NOT EXISTS paciente(id int(11) AUTO_INCREMENT NOT NULL ,source_id varchar(20)NOT NULL,idade int(11), sexo VARCHAR(12), endereco int(12), PRIMARY KEY(id), FOREIGN KEY (endereco) REFERENCES endereco(id));"
+        cursor = self._con.cursor(buffered=True)
+        query_insert = "INSERT INTO paciente(source_id, idade,sexo, endereco, teste, sintomas ) VALUES(%s,%s,%s,%s,%s,%s);"
         sourc = paciente.get_source_id()
         idade = paciente.get_idade()
         sexo = paciente.get_sexo()
+        endereco = self.insert_into_endereco(paciente)
+        teste = self.insert_into_teste(paciente)
+        sintomas = paciente.get_sintomas()
 
         # print(sexo)
-        val = (sourc, idade, sexo)
-
-        rows = cursor.execute(query_create)
+        val = (sourc, idade, sexo, endereco, teste, sintomas)
+        print('ESSE É O RESULTADO DO VAL ', val)
+        rows = cursor.execute(query_insert, val)
 
         if(rows < 0):
             print('ENTREI DENTRO DO IF')
-            self.insert_into_endereco(paciente)
 
         else:
             print('QUERY EXECUTADA COM SUCESSO')
-        cursor.execute(query_insert, val)
 
     def insert_into_endereco(self, paciente=Paciente()):
-        query_create = "CRETE TABLE [IF NOT EXISTS] endereco(id int(11) AUTO_INCREMENT NOT NULL, municipio varchar(15), estado varchar(15), PRIMARY KEY(id));"
+        cursor = self._con.cursor(buffered=True)
+
         query_insert = "INSERT INTO endereco(municipio, estado) VALUES(%s,%s);"
+        query_last_id = "SELECT LAST_INSERT_ID();"
 
         endereco = paciente.get_endereco()
 
         for x in range(len(endereco)):
-            pass
+            print('PRINT DO ENDERECO ', endereco['estado'])
+            municipio = endereco['municipio']
+            estado = endereco['estado']
+            val = (municipio, estado)
+            print('RESULTADO DE VALL', val)
+            cursor.execute(query_insert, val)
+
+            last_id = cursor.execute(query_last_id)
+            print('ESSE É O PRINT DO LAST ID', last_id)
+
+            if(last_id):
+                print('ENDERECO INSERIDO COM SUCESSO!!!')
+                return last_id
+            else:
+                print('ERRO AO INSERIR ENDERECO')
+            return last_id
         '''
         val = (municipio, estado)
         cursor = self._con.cursor()
         cursor.execute(query_create)
         cursor.execute(query_insert, val)
         '''
+
+    def insert_into_teste(self, paciente=Paciente()):
+        cursor = self._con.cursor(buffered=True)
+        query_insert = "INSERT INTO teste(data_teste, data_notificacao,resultado) VALUES(%s,%s,%s);"
+        query_last_id = "SELECT LAST_INSERT_ID();"
+
+        teste = paciente.get_resultado_teste()
+
+        for x in range(len(teste)):
+            data_teste = teste['data_teste']
+            data_notificacao = teste['data_notificacao']
+            resultado = teste['resultado']
+            val = (data_teste, data_notificacao, resultado)
+            rows = cursor.execute(query_insert)
+            last_id = cursor.execute(query_last_id, val)
+            if(last_id):
+                print('TESTE INSERIDO COM SUCESSO!!!')
+                return last_id
+            else:
+                print('ERRO AO INSERIR TESTE')
+            return last_id
 
 
 ax = AuxPersistir()

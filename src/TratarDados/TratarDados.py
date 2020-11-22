@@ -40,8 +40,8 @@ class TratarDados:
     def ObterDadosTestes(self, dados):
         for x in range(len(dados)):
             self._teste['data_teste'] = dados['hits']['hits'][x]['_source']['dataTeste']
-            self._endereco['data_notificacao'] = dados['hits']['hits'][x]['_source']['dataNotificacao']
-            self._endereco['resultado'] = dados['hits']['hits'][x]['_source']['resultadoTeste']
+            self._teste['data_notificacao'] = dados['hits']['hits'][x]['_source']['dataNotificacao']
+            self._teste['resultado'] = dados['hits']['hits'][x]['_source']['resultadoTeste']
         return self._teste
 
 
