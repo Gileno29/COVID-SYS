@@ -2,7 +2,7 @@ import mysql.connector
 from mysql.connector import Error
 
 
-class conexao:
+class Conexao:
 
     def __init__(self):
         pass
@@ -30,18 +30,3 @@ class conexao:
 #        cursor.close()
 #        connection.close
 #       print("Mysql connection is closed")
-
-
-#c = conexao()
-#executar = c.conectar()
-
-# mySql_Create_Table_Query = """CREATE TABLE Laptop (
-#                             Id int(11) NOT NULL,
- #                            Name varchar(250) NOT NULL,
-    #                           Price float NOT NULL,
-     #                        Purchase_date Date NOT NULL,
-      #                       PRIMARY KEY (Id)) """
-
-#cursor = executar.cursor()
-
-#result = cursor.execute(mySql_Create_Table_Query)

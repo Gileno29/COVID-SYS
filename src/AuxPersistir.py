@@ -1,7 +1,6 @@
-#from threading import Thread
 from TratarDados.TratarDados import TratarDados
 from TratarDados.timer import Timer
-from persistencia.conexao import ConexaoBD
+from persistencia.conexao import Conexao
 from entities.Paciente import Paciente
 
 
@@ -13,7 +12,7 @@ class AuxPersistir():
         self._dados = Timer()
         self._con = ConexaoBD()'''
         self._paciente = Paciente()
-        self._con = ConexaoBD.conexao().conectar()
+        self._con = Conexao.Conexao().conectar()
         self._t = Timer.Timer()
 
     def persistir_paciente(self):

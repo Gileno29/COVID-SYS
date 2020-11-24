@@ -1,19 +1,18 @@
-from ConexaoBD import conexao
+from persistencia.conexao import Conexao
 
 
-class BuscaBD():
+class BuscaBD:
 
     def __init__(self):
-        self._con = conexao()
+        self._con = Conexao.Conexao()
 
     def buscar_paciente(self, id=0):
         identificador = id
         conect = self._con.conectar()
 
         cursor = conect.cursor(buffered=True)
-
-        query_select_paciente = '''SELECT * FROM paciente; '''
         query_select_by_id = "SELECT * FROM paciente WHERE id= %s;"
+        query_select_paciente = "SELECT p.source_id, p.idade, p.sexo, p.sintomas, e.municipio, e.estado, t.data_teste, t.data_notificacao, t.resultado  FROM endereco as e, paciente as p, teste as t  where e.id= p.endereco AND t.id=p.teste;"
 
         if (id != 0):
 
@@ -21,12 +20,16 @@ class BuscaBD():
             cursor.execute(query_select_by_id, val)
 
             result_paciente = cursor.fetchone()
+
+            '''result_endereco = self.buscar_endereco(id)
+            result_teste = self.buscar_teste(id)'''
             return result_paciente
         else:
             cursor.execute(query_select_paciente)
 
             result = cursor.fetchall()
             print(result)
+            # self.convet_to_json(result)
 
             return result
 
@@ -48,7 +51,7 @@ class BuscaBD():
             cursor.execute(query_select_endereco)
             result = cursor.fecthall()
 
-            return result
+            # return result
 
     def buscar_teste(self, id=0):
         conect = self._con.conectar()
@@ -77,7 +80,13 @@ class BuscaBD():
             pass
         pass
 
+    def convet_to_json(self, result):
+        obj = '{' + ', '.join('"{}": "{}"'.format(k, v)
+                              for k, v in result) + '}'
+        print(obj)
+
 
 con = BuscaBD()
 
-con.buscar_paciente(55)
+con.buscar_paciente()
+# print()
