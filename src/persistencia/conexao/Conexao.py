@@ -10,7 +10,7 @@ class Conexao:
     def conectar(self):
         try:
             connection = mysql.connector.connect(
-                host='127.0.0.1', database='covid', user='root', password='123')
+                host='127.0.0.1', database='siscovid', user='root', password='123')
 
             if connection.is_connected():
                 db_Info = connection.get_server_info()

@@ -2,6 +2,8 @@ from TratarDados.TratarDados import TratarDados
 from TratarDados.timer import Timer
 from persistencia.conexao import Conexao
 from entities.Paciente import Paciente
+from datetime import datetime
+from TratarData import TratarData
 
 
 class AuxPersistir():
@@ -29,30 +31,39 @@ class AuxPersistir():
         paciente = Paciente()
 
         for x in range(len(dados_tratados)):
-            paciente.set_endereco(dados_tratados[x]['endereco'])
-            paciente.set_idade(dados_tratados[x]['idade'])
-            paciente.set_source_id(dados_tratados[x]['id'])
-            paciente.set_sexo(dados_tratados[x]['sexo'])
-            paciente.set_sintomas(dados_tratados[x]['sintomas'])
-            paciente.set_resultado_teste(dados_tratados[x]['teste'])
+            paciente.set_paciente_endereco(dados_tratados[x]['endereco'])
+            paciente.set_paciente_idade(dados_tratados[x]['idade'])
+            paciente.set_paciente_cbo(dados_tratados[x]['CBO'])
+            paciente.set_paciente_sexo(dados_tratados[x]['sexo'])
+            paciente.set_paciente_profissional_de_saude(
+                dados_tratados[x]['proficional_saude'])
+            paciente.set_dados_teste(dados_tratados[x]['teste'])
 
             self.insert_into_paciente(paciente)
 
     def insert_into_paciente(self, paciente=Paciente()):
         cursor = self._con.cursor(buffered=True)
-        query_insert = "INSERT INTO paciente(source_id, idade,sexo, endereco, teste, sintomas ) VALUES(%s,%s,%s,%s,%s,%s);"
-        sourc = paciente.get_source_id()
-        idade = paciente.get_idade()
-        sexo = paciente.get_sexo()
-        endereco = self.insert_into_endereco(paciente)
-        teste = self.insert_into_teste(paciente)
-        sintomas = paciente.get_sintomas()
+        query_insert = "INSERT INTO paciente(paciente_cbo, paciente_idade, paciente_sexo, paciente_fk_endid , paciente_profissional_de_saude) VALUES(%s,%s,%s,%s,%s);"
+        paciente_cbo = paciente.get_paciente_cbo()
 
-        val = (sourc, idade, sexo, endereco, teste, sintomas)
-        print('ESSE É O RESULTADO DO VAL ', val)
+        if(paciente_cbo == None):
+            paciente_cbo = 'não possui'
+
+        #print('CBO', paciente_cbo)
+
+        idade = paciente.get_paciente_idade()
+        sexo = paciente.get_paciente_sexo()
+        endereco = self.insert_into_endereco(paciente)
+        profissional_saude = paciente.get_paciente_profissional_de_saude()
+
+        val = (paciente_cbo, idade, sexo, endereco, profissional_saude)
+
+        #print('ESSE É O RESULTADO DO VAL ', val)
+
         cursor.execute(query_insert, val)
 
         last_id = cursor.lastrowid
+        self.insert_into_teste(paciente, last_id)
 
         if(last_id < 0):
             print('ENTREI DENTRO DO IF')
@@ -63,9 +74,9 @@ class AuxPersistir():
     def insert_into_endereco(self, paciente=Paciente()):
         cursor = self._con.cursor(buffered=True)
 
-        query_insert = "INSERT INTO endereco(municipio, estado) VALUES(%s,%s);"
-
-        endereco = paciente.get_endereco()
+        query_insert = "INSERT INTO endereco(end_municipio, end_estado) VALUES(%s,%s);"
+        pais = 'Brasil'
+        endereco = paciente.get_paciente_endereco()
 
         for x in range(len(endereco)):
 
@@ -85,17 +96,33 @@ class AuxPersistir():
                 print('ERRO AO INSERIR ENDERECO')
             return last_id
 
-    def insert_into_teste(self, paciente=Paciente()):
+    def insert_into_teste(self, paciente=Paciente(), id=0):
         cursor = self._con.cursor(buffered=True)
-        query_insert = """INSERT INTO teste(data_teste, data_notificacao, resultado) VALUES(%s,%s,%s)"""
+        d = TratarData()
+        query_insert = """INSERT INTO exame(ex_dt_notificacao, ex_dt_encerramento, ex_dt_coleta_teste,
+                        ex_dt_ini_sintomas,ex_sintomas, ex_classificacao,  
+                        ex_resultado, ex_estado_teste, ex_condicoes, ex_fk_paciente_id,
+                        ex_evolucao_caso) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
 
-        teste = paciente.get_resultado_teste()
+        teste = paciente.get_dados_teste()
+
+        print("ESSE É O Valor do Teste", teste)
 
         for x in range(len(teste)):
-            data_teste = teste['data_teste']
-            data_notificacao = teste['data_notificacao']
+            data_teste = d.convert_data(teste['data_teste'])
+            data_notificacao = d.convert_data(teste['data_notificacao'])
+            data_encerramento = d.convert_data(teste['data_encerramento'])
+            data_ini_sintomas = d.convert_data(teste['data_inicio_sintomas'])
+            sintomas = teste['sintomas']
+            classificacao = teste['classificacao']
+            estado_teste = teste['estado_teste']
+            condicoes = teste['condicoes']
+            evolucao = teste['evolucao_caso']
+            paciente = id
             resultado = teste['resultado']
-            val = (data_teste, data_notificacao, resultado)
+
+            val = (data_notificacao, data_encerramento,
+                   data_teste, data_ini_sintomas, sintomas, classificacao, resultado, estado_teste, condicoes, paciente, evolucao)
 
             cursor.execute(query_insert, val)
             last_id = cursor.lastrowid
