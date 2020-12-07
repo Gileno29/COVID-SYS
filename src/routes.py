@@ -1,11 +1,10 @@
 import datetime
+from flask import render_template
 from flask import Flask
 from BuscaBD import BuscaBD
 import json
 
-con = BuscaBD()
-con.buscar_paciente()
-app = Flask("youtube")
+app = Flask('TESTE')
 
 
 @app.route("/paciente", methods=["GET"])
@@ -21,9 +20,14 @@ def olaMundo():
     return y
 
 
-def myconverter(o):
+@app.route("/")
+@app.route("/index")
+def index():
+    return render_template('segtela.html')
 
+
+def myconverter(o):
     return o.__str__()
 
 
-app.run()
+app.run(debug=True)

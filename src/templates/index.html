@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Tela de Login</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cabin:700">
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+	
+	<!-- login google -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+   <meta name="google-signin-client_id" content="1071071328035-8m2g4i3od3mduj7nbh8t299bgpjp25gd.apps.googleusercontent.com">
+   <script src="https://apis.google.com/js/platform.js" async defer></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   <script>
+   function onSignIn(googleUser) {
+  var profile = googleUser.getBasicProfile();
+  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+  console.log('Name: ' + profile.getName());
+  console.log('Image URL: ' + profile.getImageUrl());
+  console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+}
+   </script>
+    <style>
+       .g-signin2{
+         margin-left: auto;
+		 margin-right: auto;
+		 width: 6em
+       }
+       .data{
+           display: none;
+       }
+   </style>
+
+</head>
+
+<body id="page-top">
+
+    <header class="masthead" style="background-color: #36b9cc;">
+        <div class="intro-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <h1 class="brand-heading black">SisCovid</h1>
+                        <p class="intro-text">Acesse informações sobre o covid-19 no Brasil.</p>
+						 <div class="g-signin2" data-onsuccess="onSignIn"></div>
+						</div>
+                </div>
+            </div>
+			
+			
+        </div>
+		
+		
+    </header>
+	
+    <footer >
+        <div class="container text-center">
+            <p>Copyright © SisCovid 2020</p>
+        </div>
+    </footer>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <script src="assets/js/grayscale.js"></script>
+</body>
+
+</html>
