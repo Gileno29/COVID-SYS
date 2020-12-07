@@ -22,8 +22,7 @@ def olaMundo():
 
 
 def myconverter(o):
-    '''if isinstance(o, datetime.datetime):
-        print('entrei')'''
+
     return o.__str__()
 
 
