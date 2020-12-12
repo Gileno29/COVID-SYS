@@ -4,6 +4,7 @@ from persistencia.conexao import Conexao
 from entities.Paciente import Paciente
 from datetime import datetime
 from TratarData import TratarData
+import random
 
 
 class AuxPersistir():
@@ -12,7 +13,7 @@ class AuxPersistir():
         # Thread.__init__(self)
         '''self._paciente = TratarDados()
         self._dados = Timer()
-        self._con = ConexaoBD()'''
+        self._con = Conexao()'''
         self._paciente = Paciente()
         self._con = Conexao.Conexao().conectar()
         self._t = Timer.Timer()
@@ -29,7 +30,6 @@ class AuxPersistir():
 
     def constroi_objeto(self, dados_tratados):
         paciente = Paciente()
-
         for x in range(len(dados_tratados)):
             paciente.set_paciente_endereco(dados_tratados[x]['endereco'])
             paciente.set_paciente_idade(dados_tratados[x]['idade'])
@@ -49,16 +49,12 @@ class AuxPersistir():
         if(paciente_cbo == None):
             paciente_cbo = 'não possui'
 
-        #print('CBO', paciente_cbo)
-
         idade = paciente.get_paciente_idade()
         sexo = paciente.get_paciente_sexo()
         endereco = self.insert_into_endereco(paciente)
         profissional_saude = paciente.get_paciente_profissional_de_saude()
 
         val = (paciente_cbo, idade, sexo, endereco, profissional_saude)
-
-        #print('ESSE É O RESULTADO DO VAL ', val)
 
         cursor.execute(query_insert, val)
 
@@ -75,7 +71,7 @@ class AuxPersistir():
         cursor = self._con.cursor(buffered=True)
 
         query_insert = "INSERT INTO endereco(end_municipio, end_estado) VALUES(%s,%s);"
-        pais = 'Brasil'
+        #pais = 'Brasil'
         endereco = paciente.get_paciente_endereco()
 
         for x in range(len(endereco)):
@@ -106,7 +102,7 @@ class AuxPersistir():
 
         teste = paciente.get_dados_teste()
 
-        print("ESSE É O Valor do Teste", teste)
+        #print("ESSE É O Valor do Teste", teste)
 
         for x in range(len(teste)):
             data_teste = d.convert_data(teste['data_teste'])
@@ -117,10 +113,10 @@ class AuxPersistir():
             classificacao = teste['classificacao']
             estado_teste = teste['estado_teste']
             condicoes = teste['condicoes']
-            evolucao = teste['evolucao_caso']
+            evolucao = self.randon()  # teste['evolucao_caso']
             paciente = id
             resultado = teste['resultado']
-
+            print(resultado)
             val = (data_notificacao, data_encerramento,
                    data_teste, data_ini_sintomas, sintomas, classificacao, resultado, estado_teste, condicoes, paciente, evolucao)
 
@@ -136,6 +132,18 @@ class AuxPersistir():
                 print('ERRO AO INSERIR TESTE')
             return last_id
 
+    def randon(self):
+        number = random.randrange(0, 2)
+        if(number == 0):
+            return 'Morte'
+        else:
+            return'Curado'
+
 
 ax = AuxPersistir()
 ax.persistir_paciente()
+
+
+ax = AuxPersistir()
+
+print(ax.randon())

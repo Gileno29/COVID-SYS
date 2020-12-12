@@ -55,12 +55,13 @@ class TratarDados:
             #self._teste['descr_sintomas_outros']= dados['hits']['hits'][x]['_source']['']
             self._teste['evolucao_caso'] = dados['hits']['hits'][x]['_source']['evolucaoCaso']
             #self._teste['data_coleta'] = dados['hits']['hits'][x]['_source']['']
+            # print(dados)
 
         return self._teste
 
 
 # teste de funcionamento da classe
-'''
+"""
 t = Timer()
 t.start()
 dados = t.get_dados()
@@ -71,5 +72,5 @@ print('#################### DADOS NA CLASSE TRATAR DADOS########################
 
 # print(dados)
 tr = TratarDados()
-print(tr.ObterDadosPaciente(dados))
-'''
+tr.ObterDadosPaciente(dados)
+"""

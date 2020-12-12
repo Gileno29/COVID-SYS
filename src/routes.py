@@ -1,12 +1,11 @@
-import datetime
 from flask import render_template
 from flask import Flask
-from BuscaBD import BuscaBD
-import json
-
-app = Flask('TESTE')
+from Filtro import Filtro
 
 
+app = Flask(__name__)
+
+''''
 @app.route("/paciente", methods=["GET"])
 def olaMundo():
     con = BuscaBD()
@@ -18,16 +17,22 @@ def olaMundo():
     # print(y)
 
     return y
+'''
 
 
 @app.route("/")
-@app.route("/index")
+@app.route("/dados")
 def index():
-    return render_template('segtela.html')
+    f = Filtro()
+    dados = f.calculaMorteSexo()
+    print(dados)
+
+    return render_template('segtela.html', mulher=dados['mulher'],
+                           homem=dados['homem'])
 
 
 def myconverter(o):
     return o.__str__()
 
 
-app.run(debug=True)
+app.run(debug=True, port=4000)

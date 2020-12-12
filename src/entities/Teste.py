@@ -33,8 +33,8 @@ class Teste:
     def get_data_encerramento(self):
         return self._data_encerramento
 
-    def set_data_inicio_sintomas(self, data_encerramento):
-        self._data_inicio_sintomas = data_inicio_sintomas
+    def set_data_inicio_sintomas(self, data_inicio_sintoma):
+        self._data_inicio_sintomas = data_inicio_sintoma
 
     def get_data_inicio_sintomas(self):
         return self._data_inicio_sintomas
