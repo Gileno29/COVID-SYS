@@ -56,28 +56,33 @@ class InsereBD(Thread):
         endereco = Endereco()
         exame = Teste()
         for x in range(len(dados_tratados['hits']['hits'])):
+
+            paciente.set_paciente_idade(
+                dados_tratados['hits']['hits'][x]['_source']['idade'])
+            paciente.set_paciente_cbo(
+                dados_tratados['hits']['hits'][x]['_source']['cbo'])
+            paciente.set_paciente_sexo(
+                dados_tratados['hits']['hits'][x]['_source']['sexo'])
+            paciente.set_paciente_profissional_de_saude(
+                dados_tratados['hits']['hits'][x]['_source']['profissionalSaude'])
+
             try:
-                ''' paciente.set_paciente_endereco(
-                    dados_tratados['hits']['hits'][x]['_source']['endereco'])'''
-                paciente.set_paciente_idade(
-                    dados_tratados['hits']['hits'][x]['_source']['idade'])
-                paciente.set_paciente_cbo(
-                    dados_tratados['hits']['hits'][x]['_source']['cbo'])
-                paciente.set_paciente_sexo(
-                    dados_tratados['hits']['hits'][x]['_source']['sexo'])
-                paciente.set_paciente_profissional_de_saude(
-                    dados_tratados['hits']['hits'][x]['_source']['profissionalSaude'])
+                paciente.set_raca(
+                    dados_tratados['hits']['hits'][x]['_source']['racaCor'])
+            except KeyError:
+                paciente.set_raca('indefinido')
 
                 # construcao do OBJ ENDERECO
-                endereco.set_estado(
-                    dados_tratados['hits']['hits'][x]['_source']['estado'])
-                endereco.set_municipio(
-                    dados_tratados['hits']['hits'][x]['_source']['municipio'])
+            endereco.set_estado(
+                dados_tratados['hits']['hits'][x]['_source']['estado'])
+            endereco.set_municipio(
+                dados_tratados['hits']['hits'][x]['_source']['municipio'])
 
+            try:
                 # construcao do OBJ EXAME
                 exame.set_data_teste(
                     dados_tratados['hits']['hits'][x]['_source']['dataTeste'])
-            # exame.set_data_encerramento(
+                # exame.set_data_encerramento(
                 # dados_tratados['hits']['hits'][x]['_source']['dataEncerramento'])
                 exame.set_data_notificacao(
                     dados_tratados['hits']['hits'][x]['_source']['dataNotificacao'])
@@ -89,23 +94,29 @@ class InsereBD(Thread):
                     dados_tratados['hits']['hits'][x]['_source']['sintomas'])
                 exame.set_data_inicio_sintomas(
                     dados_tratados['hits']['hits'][x]['_source']['dataInicioSintomas'])
-                exame.set_classificacao(
-                    dados_tratados['hits']['hits'][x]['_source']['classificacaoFinal'])
                 exame.set_estado_teste(
                     dados_tratados['hits']['hits'][x]['_source']['estadoTeste'])
                 exame.set_condicoes(
                     dados_tratados['hits']['hits'][x]['_source']['condicoes'])
                 exame.set_evolucao(
                     dados_tratados['hits']['hits'][x]['_source']['evolucaoCaso'])
-                # paciente.set_dados_teste(dados_tratados[x]['teste'])
 
-                self.insert_dados(paciente, endereco, exame)
             except KeyError:
                 exame.set_evolucao('curado')
 
+            try:
+                exame.set_classificacao(
+                    dados_tratados['hits']['hits'][x]['_source']['classificacaoFinal'])
+            except KeyError:
+                exame.set_classificacao('indefinido')
+
+            # paciente.set_dados_teste(dados_tratados[x]['teste'])
+
+            self.insert_dados(paciente, endereco, exame)
+
     def insert_dados(self, paciente=Paciente(), endereco_API=Endereco(), exame=Teste()):
         cursor = self._con.cursor(buffered=True)
-        query_insert = "INSERT INTO paciente(paciente_cbo, paciente_idade, paciente_sexo, paciente_fk_endid , paciente_profissional_de_saude) VALUES(%s,%s,%s,%s,%s);"
+        query_insert = "INSERT INTO paciente(paciente_cbo, paciente_idade, paciente_sexo, paciente_fk_endid , paciente_profissional_de_saude, paciente_raca) VALUES(%s,%s,%s,%s,%s,%s);"
 
         paciente_cbo = paciente.get_paciente_cbo()
         if(paciente_cbo is None):
@@ -116,8 +127,8 @@ class InsereBD(Thread):
         endereco = self.insert_into_endereco(endereco_API)
 
         profissional_saude = paciente.get_paciente_profissional_de_saude()
-
-        val = (paciente_cbo, idade, sexo, endereco, profissional_saude)
+        raca = paciente.get_raca()
+        val = (paciente_cbo, idade, sexo, endereco, profissional_saude, raca)
         cursor.execute(query_insert, val)
         last_id = cursor.lastrowid
         self.insert_into_teste(exame, last_id)
@@ -159,7 +170,7 @@ class InsereBD(Thread):
 
         data_teste = d.convert_data(exame.get_data_teste())
         data_notificacao = d.convert_data(exame.get_data_notificacao())
-        #data_encerramento = d.convert_data(exame.get_data_encerramento())
+        # data_encerramento = d.convert_data(exame.get_data_encerramento())
         data_ini_sintomas = d.convert_data(exame.get_data_inicio_sintomas())
         sintomas = exame.get_sintomas()
         classificacao = exame.get_classificacao()

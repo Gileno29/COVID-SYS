@@ -11,6 +11,7 @@ class Paciente:
         self._paciente_profissional_de_saude = ''
         self._paciente_profissional_de_seguranca = ''
         self._dados_teste = {}
+        self._racaCor = ''
 
     def set_paciente_cbo(self, paciente_cbo):
         self._paciente_cbo = paciente_cbo
@@ -53,3 +54,9 @@ class Paciente:
 
     def get_dados_teste(self):
         return self._dados_teste
+
+    def set_raca(self, raca):
+        self._racaCor = raca
+
+    def get_raca(self):
+        return self._racaCor

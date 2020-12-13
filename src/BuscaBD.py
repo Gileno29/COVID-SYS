@@ -88,6 +88,14 @@ class BuscaBD:
             pass
         pass
 
+    def buscar_obtos_sintomas(self):
+        conect = self._con.conectar()
+        cursor = conect.cursor(buffered=True)
+        query_select_paciente = "SELECT  p.paciente_sexo, ex.ex_sintomas, ex.ex_resultado, ex.ex_evolucao_caso FROM  paciente as p, exame as ex  where ex. ex_fk_paciente_id=p.paciente_id;"
+
+        cursor.execute(query_select_paciente)
+        result = cursor.fetchall()
+        return result
     '''def convet_to_json(self, result):
         obj = '{' + ', '.join('"{}": "{}"'.format(k, v)
                               for k, v in result) + '}'

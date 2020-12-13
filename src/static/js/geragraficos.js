@@ -1,18 +1,31 @@
 
-    function grafico_mortalidade_sintomas(homem, mulher){  
-        var chLine = document.getElementById("sintomas");
+    function grafico_mortalidade_sintomas(febre, tosse, garganta, dispineia, outros){  
+        var Line = document.getElementById("sintomas");
         var chartData = {
-        labels: ["Masculino","Feminino"],
+        labels: ["Febre","Dor de Garganta", "Tosse", "Dispineia", "Outros"],
         datasets: [{
-            data: [homem, 0],
+            data: [0,febre],
             backgroundColor: 'rgba(0, 200, 200, 0.5)',
-            borderColor: '#FA8072',
-
+            
         },
         {
-            data: [0,mulher],
-            backgroundColor: 'rgba(0, 0, 200, 0.5)',
-            borderColor: '#FA8072'}],
+             data: [0,tosse],
+            backgroundColor: 'rgba(255, 0, 0 , 0.5)',
+            },
+            
+            {
+                data: [0,garganta],
+                backgroundColor: 'rgba(0, 255, 127 , 0.5)',
+               },
+            {
+                data: [0,dispineia],
+                backgroundColor: 'rgba(255, 0, 255, 0.5)',
+               },
+            {
+                data: [0,outros],
+                backgroundColor: 'rgba(255, 255, 0 , 0.5)',
+               }   
+        ],
 
         
         Styling:[{
@@ -24,8 +37,8 @@
        
 
         };
-        if (chLine) {
-        new Chart(chLine, {
+        if (Line) {
+        new Chart(Line, {
         type: 'line',
         data: chartData,
         styling: {
@@ -34,10 +47,14 @@
         options: {
             scales: {
             yAxes: [{
-                ticks: {
-                beginAtZero: false
-                }
-            }]
+                stacked: true,
+                ticks:{
+                    suggestedMin: 0,
+                    suggestedMax: 5
+                } 
+            },
+            
+            ]
             },
             legend: {
             display: false

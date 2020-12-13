@@ -56,22 +56,103 @@ class Filtro:
 
             return result
 
-    def calculaMorteSexo(self):
+    def buscar_obtos_sintomas(self):
+        conect = self._con.conectar()
+        cursor = conect.cursor(buffered=True)
+        query_select_paciente = "SELECT  p.paciente_sexo, ex.ex_sintomas, ex.ex_resultado, ex.ex_evolucao_caso FROM  paciente as p, exame as ex  where ex. ex_fk_paciente_id=p.paciente_id;"
+
+        cursor.execute(query_select_paciente)
+        result = cursor.fetchall()
+        return result
+
+    def calcula_morte_sexo(self):
         h = 0
         m = 0
         dados = self._busca.buscar_paciente_sexo()
 
         for x in range(len(dados)):
-            if(dados[x][0] == "Feminino" and dados[x][1] == "Óbito" and dados[x][2]):
+            if(dados[x][0] == "Feminino" and dados[x][1] == "Óbito" and dados[x][2] == "Positivo"):
                 m = m+1
-            elif(dados[x][0] == "Masculino" and dados[x][1] == "Óbito" and dados[x][2]):
+            elif(dados[x][0] == "Masculino" and dados[x][1] == "Óbito" and dados[x][2] == "Positivo"):
                 h = h+1
 
         total = {'mulher': m, 'homem': h}
 
         return total
 
+    def calcula_morte_sintomas(self):
+        dados = self._busca.buscar_obtos_sintomas()
+        febre = 0
+        tosse = 0
+        dor_garganta = 0
+        dispineia = 0
+        outros = 0
+        # print(dados)
+        for x in range(len(dados)):
+            if(dados[x][2] == "Positivo" and dados[x][3] == "Óbito"):
+                dados_novos = dados[x][1].split(",")
+
+                if("Dor de Garganta" in dados_novos):
+                    dor_garganta = dor_garganta + 1
+                    if("Tosse" in dados_novos):
+                        tosse = tosse + 1
+                    elif("Febre" in dados_novos):
+                        febre = febre + 1
+                    elif("Dispineia" in dados_novos):
+                        dispineia = dispineia + 1
+                    elif("Outros" in dados_novos):
+                        outros = outros + 1
+
+                if("Tosse" in dados_novos):
+                    tosse = tosse + 1
+                    if("Dor de Garganta" in dados_novos):
+                        dor_garganta = dor_garganta + 1
+                    elif("Febre" in dados_novos):
+                        febre = febre + 1
+                    elif("Dispineia" in dados_novos):
+                        dispineia = dispineia + 1
+                    elif("Outros" in dados_novos):
+                        outros = outros + 1
+
+                if("Dispneia" in dados_novos):
+                    dispineia = dispineia + 1
+                    if("Dor de Garganta" in dados_novos):
+                        dor_garganta = dor_garganta + 1
+                    elif("Tosse" in dados_novos):
+                        tosse = tosse + 1
+                    elif("Febre" in dados_novos):
+                        febre = febre + 1
+                    elif("Outros" in dados_novos):
+                        outros = outros + 1
+
+                if("Outros" in dados_novos):
+                    outros = outros + 1
+                    if("Dor de Garganta" in dados_novos):
+                        dor_garganta = dor_garganta + 1
+                    elif("Tosse" in dados_novos):
+                        tosse = tosse + 1
+                    elif("Febre" in dados_novos):
+                        febre = febre + 1
+                    elif("Dispineia" in dados_novos):
+                        dispineia = dispineia + 1
+
+                if("Febre" in dados_novos):
+                    febre = febre + 1
+                    if("Dor de Garganta" in dados_novos):
+                        dor_garganta = dor_garganta + 1
+                    elif("Tosse" in dados_novos):
+                        tosse = tosse + 1
+                    elif("Outros" in dados_novos):
+                        outros = outros + 1
+                    elif("Dispineia" in dados_novos):
+                        dispineia = dispineia + 1
+
+        total = {'febre': febre, 'dor_garganta': dor_garganta,
+                 'tosse': tosse, 'dispineia': dispineia, 'outros': outros}
+
+        return total
+
 
 f = Filtro()
 
-f.calculaMorteSexo()
+f.calcula_morte_sintomas()

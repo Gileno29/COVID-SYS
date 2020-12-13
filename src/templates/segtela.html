@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='fonts/fontawesome-all.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='fonts/font-awesome.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='fonts/fontawesome5-overrides.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/custom/style.css') }}">
+    
 	
 	<!-- login google -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -18,7 +20,7 @@
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
-<body id="page-top" class="white" onload="grafico('{{homem}}', '{{mulher}}')" >
+<body id="page-top" class="white" onload="grafico('{{homem}}', '{{mulher}}'); grafico_mortalidade_sintomas('{{febre}}', '{{tosse}}','{{dor_garganta}}', '{{dispineia}}','{{outros}}')" >
     <div id="wrapper">
         <div class="d-flex flex-column" id="content-wrapper">
             <div id="content">
@@ -54,7 +56,18 @@
 				 <div class="col-lg-6 col-xl-6 element-center">
                 <form class="form-inline" >
 				  <div class="form-group mx-sm-3 mb-2">
-					<input type="input" class="form-control" placeholder="Nome da cidade">
+                    <form>
+                        <div class="form-group">
+                          <label for="exampleFormControlSelect1">Selecione o Estado</label>
+                          <select class="form-control" id="exampleFormControlSelect1">
+                            <option>RN</option>
+                            <option>RS</option>
+                            <option>AC</option>
+                            <option>PB</option>
+                            <option>MT</option>\
+                          </select>
+                        </div>
+                      </form>
 				  </div>
 				  <button type="submit" class="btn btn-primary mb-2">Buscar</button>
 				</form>
@@ -72,18 +85,29 @@
 				 <div class="col-lg-12 col-xl-12">
                         <div class="card shadow mb-4">
                             <div class="card-header d-flex justify-content-between align-items-center">
-                                <h6 class="text-primary font-weight-bold m-0">Taxa de mortalidade por sexo</h6>
+                                <h6 class="text-primary font-weight-bold m-0">Taxa de mortalidade por sexo e taxa de mortalidade por sintomas</h6>
                  
                             </div>
-                            <div class="card-body">
-                                <div class="chart-area"><canvas data-bs-chart="{&quot;type&quot;:&quot;doughnut&quot;,&quot;data&quot;:{&quot;labels&quot;:
-								[&quot;Feminino&quot;,&quot;Masculino&quot;],&quot;datasets&quot;:
-								[{&quot;label&quot;:&quot;&quot;,&quot;backgroundColor&quot;:[&quot;#4e73df&quot;,&quot;#1cc88a&quot;],&quot;borderColor&quot;:
-								[&quot;#ffffff&quot;,&quot;#ffffff&quot;],&quot;data&quot;:[&quot;50&quot;,&quot;50&quot;]}]},&quot;options&quot;:
-								{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false},&quot;title&quot;:{}}}"></canvas></div>
+                            <div class="card-body ">
+                                <div class="container ">
+                                    <div class="col-md-4 d-inline-block">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <canvas id="chLine" ></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 d-inline-block ">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <canvas id="sintomas" ></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div
-                                    class="text-center small mt-4"><span class="mr-2"><i class="fas fa-circle text-primary"></i>&nbsp;Feminino</span><span class="mr-2">
-									<i class="fas fa-circle text-success"></i>
+                                    class="text-left small mt-4"><span class="mr-2"><i class="fas fa-circle mulher"></i>&nbsp;Feminino</span><span class="mr-2">
+									<i class="fas fa-circle homem"></i>
 									&nbsp;Masculino</span>
 								</div>
                         </div>
@@ -195,7 +219,7 @@
     <div class="row">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-body" onload="grafico_mortalidade_sintomas('{{homem}}', '{{mulher}}')">
+                <div class="card-body">
                     <canvas id="sintomas" ></canvas>
                 </div>
             </div>

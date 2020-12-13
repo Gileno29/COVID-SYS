@@ -24,11 +24,18 @@ def olaMundo():
 @app.route("/dados")
 def index():
     f = Filtro()
-    dados = f.calculaMorteSexo()
-    print(dados)
+    dados_sexo = f.calcula_morte_sexo()
+    dados_sintomas = f.calcula_morte_sintomas()
+    print(dados_sintomas)
 
-    return render_template('segtela.html', mulher=dados['mulher'],
-                           homem=dados['homem'])
+    return render_template('segtela.html', mulher=dados_sexo['mulher'],
+                           homem=dados_sexo['homem'], febre=dados_sintomas['febre'], dor_garganta=dados_sintomas['dor_garganta'],
+                           tosse=dados_sintomas['tosse'], dispineia=dados_sintomas['dispineia'],
+                           outros=dados_sintomas['outros'])
+
+
+def dados_estado():
+    pass
 
 
 def myconverter(o):
