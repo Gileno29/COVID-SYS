@@ -32,15 +32,6 @@ class BuscaBD:
             result = cursor.fetchall()
             return result
 
-    def buscar_paciente_sexo(self):
-        conect = self._con.conectar()
-        cursor = conect.cursor(buffered=True)
-        query_select_paciente = "SELECT  p.paciente_sexo, ex.ex_evolucao_caso, ex_resultado FROM  paciente as p, exame as ex  where ex. ex_fk_paciente_id=p.paciente_id;"
-
-        cursor.execute(query_select_paciente)
-        result = cursor.fetchall()
-        return result
-
     def buscar_endereco(self, id_endereco=0, id_paciente=0):
         conect = self._con.conectar()
 
@@ -88,14 +79,69 @@ class BuscaBD:
             pass
         pass
 
-    def buscar_obtos_sintomas(self):
+    def buscar_paciente_sexo(self, estado=None):
         conect = self._con.conectar()
         cursor = conect.cursor(buffered=True)
-        query_select_paciente = "SELECT  p.paciente_sexo, ex.ex_sintomas, ex.ex_resultado, ex.ex_evolucao_caso FROM  paciente as p, exame as ex  where ex. ex_fk_paciente_id=p.paciente_id;"
+        query_select_paciente = ''
+        result = []
+        if(estado is not None):
+            estados = {'RN': 'Rio Grande Do Norte', 'AC': 'Acre'}
+            if(estado in estados):
+                print('Checando a lista por sexo')
+                val = (estados[estado],)
+                query_select_paciente = "SELECT  p.paciente_sexo, ex.ex_evolucao_caso, ex_resultado, e.end_estado FROM  paciente as p, exame as ex, endereco as e  where ex.ex_fk_paciente_id = p.paciente_id and e.end_estado like %s and p.paciente_fk_endid = end_id limit 6000"
+                cursor.execute(query_select_paciente, val)
+                result = cursor.fetchall()
+        else:
+            query_select_paciente = "SELECT  p.paciente_sexo, ex.ex_evolucao_caso, ex_resultado FROM  paciente as p, exame as ex where ex. ex_fk_paciente_id=p.paciente_id;"
+            cursor.execute(query_select_paciente)
+            result = cursor.fetchall()
 
-        cursor.execute(query_select_paciente)
-        result = cursor.fetchall()
         return result
+
+    def buscar_obtos_sintomas(self, estado=None):
+        conect = self._con.conectar()
+        query_select_paciente = ''
+        result = []
+        if(estado is not None):
+            estados = {'RN': 'Rio Grande Do Norte', 'AC': 'Acre'}
+            if(estado in estados):
+                print('Checando a lista')
+                val = (estados[estado],)
+                query_select_paciente = "SELECT  p.paciente_sexo, ex.ex_sintomas, ex.ex_resultado, ex.ex_evolucao_caso, e.end_estado FROM  paciente as p, exame as ex, endereco as e  where ex. ex_fk_paciente_id=p.paciente_id and e.end_estado like %s and p.paciente_fk_endid = end_id limit 6000;"
+                cursor = conect.cursor(buffered=True)
+                cursor.execute(query_select_paciente, val)
+                result = cursor.fetchall()
+            else:
+                print('Não existe esse estado')
+        else:
+            query_select_paciente = "SELECT  p.paciente_sexo, ex.ex_sintomas, ex.ex_resultado, ex.ex_evolucao_caso FROM  paciente as p, exame as ex  where ex. ex_fk_paciente_id=p.paciente_id;"
+            cursor = conect.cursor(buffered=True)
+            cursor.execute(query_select_paciente)
+            result = cursor.fetchall()
+
+        return result
+
+    def buscar_obtos_idade(self, estado=None):
+        conect = self._con.conectar()
+        cursor = conect.cursor(buffered=True)
+        query_select_paciente = ''
+        result = []
+        if(estado is not None):
+            estados = {'RN': 'Rio Grande Do Norte', 'AC': 'Acre'}
+            if(estado in estados):
+                print('Checando a lista por idade')
+                val = (estados[estado],)
+                query_select_paciente = "SELECT  p.paciente_idade, ex.ex_evolucao_caso, ex_resultado, e.end_estado FROM  paciente as p, exame as ex, endereco as e  where ex.ex_fk_paciente_id = p.paciente_id and e.end_estado like %s and p.paciente_fk_endid = end_id limit 6000"
+                cursor.execute(query_select_paciente, val)
+                result = cursor.fetchall()
+        else:
+            query_select_paciente = "SELECT  p.paciente_idade, ex.ex_evolucao_caso, ex_resultado FROM  paciente as p, exame as ex where ex. ex_fk_paciente_id=p.paciente_id;"
+            cursor.execute(query_select_paciente)
+            result = cursor.fetchall()
+
+        return result
+
     '''def convet_to_json(self, result):
         obj = '{' + ', '.join('"{}": "{}"'.format(k, v)
                               for k, v in result) + '}'

@@ -65,11 +65,17 @@ class Filtro:
         result = cursor.fetchall()
         return result
 
-    def calcula_morte_sexo(self):
+    def calcula_morte_sexo(self, estado=None):
         h = 0
         m = 0
-        dados = self._busca.buscar_paciente_sexo()
+        dados = []
+        if(estado is not None):
+            dados = self._busca.dados = self._busca.buscar_paciente_sexo(
+                estado)
 
+        else:
+            dados = self._busca.buscar_paciente_sexo()
+            print('estou aqqui')
         for x in range(len(dados)):
             if(dados[x][0] == "Feminino" and dados[x][1] == "Óbito" and dados[x][2] == "Positivo"):
                 m = m+1
@@ -80,13 +86,18 @@ class Filtro:
 
         return total
 
-    def calcula_morte_sintomas(self):
-        dados = self._busca.buscar_obtos_sintomas()
+    def calcula_morte_sintomas(self, estado=None):
+        dados = []
         febre = 0
         tosse = 0
         dor_garganta = 0
         dispineia = 0
         outros = 0
+        if(estado is not None):
+            dados = self._busca.buscar_obtos_sintomas(estado)
+            #print("O estado é", estado)
+        else:
+            dados = self._busca.buscar_obtos_sintomas()
         # print(dados)
         for x in range(len(dados)):
             if(dados[x][2] == "Positivo" and dados[x][3] == "Óbito"):
@@ -146,13 +157,45 @@ class Filtro:
                         outros = outros + 1
                     elif("Dispineia" in dados_novos):
                         dispineia = dispineia + 1
-
         total = {'febre': febre, 'dor_garganta': dor_garganta,
                  'tosse': tosse, 'dispineia': dispineia, 'outros': outros}
 
         return total
 
+    def calcular_morte_por_idade(self, estado=None):
+        idade0A25 = 0
+        idade26A30 = 0
+        idade31A40 = 0
+        idade41A60 = 0
+        maisDe60 = 0
+        total = []
+        if(estado is not None):
+            dados = self._busca.buscar_obtos_idade(estado)
+            #print("O estado é", estado)
+        else:
+            dados = self._busca.buscar_obtos_idade()
+            # print(dados)
+        for x in range(len(dados)):
+            if(dados[x][2] == "Positivo" and dados[x][1] == "Óbito"):
+                #dados_novos = dados[x][1].split(",")
 
-f = Filtro()
+                if(dados[x][0] <= 25):
+                    idade0A25 = idade0A25 + 1
+                elif(dados[x][0] > 25 and dados[x][0] < 31):
+                    idade26A30 = idade26A30 + 1
+                elif(dados[x][0] > 30 and dados[x][0] < 40):
+                    idade31A40 = idade31A40 + 1
+                elif(dados[x][0] > 40 and dados[x][0] < 60):
+                    idade41A60 = idade41A60 + 1
+                else:
+                    maisDe60 = maisDe60+1
 
-f.calcula_morte_sintomas()
+        total = {'idade0A25': idade0A25, 'idade26A30': idade26A30,
+                 'idade31A40': idade31A40, 'idade41A60': idade41A60, 'maisDe60': maisDe60}
+
+        return total
+
+
+#f = Filtro()
+
+# f.calcular_morte_por_idade()

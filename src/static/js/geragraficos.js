@@ -114,3 +114,56 @@
         });
         } 
     }
+
+    function mortes_por_idade(idade0A25,idade26A30,idade31A40,idade41A60,maisDe60){  
+        var radar = document.getElementById("idade");
+        var chartData = {
+        labels: ["0-25","26-30","31-40","41-60","mais de 60"],
+        datasets: [{
+            data: [2000,5000,idade31A40,idade41A60, 6000],
+            backgroundColor: 'rgba(0, 255,0 , 0.5)',
+            //borderColor: '#FA8072',
+
+        },
+
+        {
+            data: [0,0,3300,8000, 0],
+            backgroundColor: 'rgba(0, 100, 100, 0.5)',
+            //borderColor: '#FA8072',
+
+        }
+
+    
+    ],
+
+        
+        Styling:[{
+            backgroundColor: 'rgba(0, 2, 200, 0.5)',
+
+
+        }]
+
+       
+
+        };
+
+        if (radar) {
+        new Chart(radar, {
+        type: 'radar',
+        data: chartData,
+        styling: {
+            backgroundColor: '#20B2AA'
+        },
+        options: {
+            scales: {
+            yAxes: [{
+                
+            }]
+            },
+            legend: {
+            display: false
+            }
+        }
+        });
+        } 
+    }
