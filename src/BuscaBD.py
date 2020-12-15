@@ -24,7 +24,6 @@ class BuscaBD:
 
             result_paciente = cursor.fetchone()
 
-            result_paciente
             return result_paciente
         else:
 

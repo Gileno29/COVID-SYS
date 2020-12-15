@@ -3,23 +3,22 @@ from flask import Flask
 from flask import request
 from flask import redirect
 from Filtro import Filtro
+from BuscaBD import BuscaBD
+import json
 
 
 app = Flask(__name__)
 
-''''
+
 @app.route("/paciente", methods=["GET"])
 def olaMundo():
     con = BuscaBD()
-    result = con.buscar_paciente()
-    print(result)
+    #result = con.buscar_paciente()
+    # print(result)
     y = json.dumps(con.buscar_paciente(), indent=4,
                    sort_keys=True, default=myconverter)
 
-    # print(y)
-
     return y
-'''
 
 
 @app.route("/")
@@ -61,6 +60,10 @@ def dados_estado():
 @app.route("/login")
 def login():
     return render_template('index.html')
+
+
+def myconverter(o):
+    return o.__str__()
 
 
 app.run(debug=True, port=4000)
