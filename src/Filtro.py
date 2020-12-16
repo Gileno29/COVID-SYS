@@ -171,13 +171,10 @@ class Filtro:
         total = []
         if(estado is not None):
             dados = self._busca.buscar_obtos_idade(estado)
-            #print("O estado é", estado)
         else:
             dados = self._busca.buscar_obtos_idade()
-            # print(dados)
         for x in range(len(dados)):
             if(dados[x][2] == "Positivo" and dados[x][1] == "Óbito"):
-                #dados_novos = dados[x][1].split(",")
 
                 if(dados[x][0] <= 25):
                     idade0A25 = idade0A25 + 1

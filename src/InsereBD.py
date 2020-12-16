@@ -20,9 +20,12 @@ class InsereBD(Thread):
         Thread.__init__(self)
         self._user = 'user-public-notificacoes'
         self._password = 'Za4qNXdyQNSa9YaA'
-        self._url = 'https://elasticsearch-saps.saude.gov.br/desc-notificacoes-esusve-rn/_search?size=6000'
+        self._url = 'https://elasticsearch-saps.saude.gov.br/desc-notificacoes-esusve-*/_search?size=6000'
+        self._url = 'https://elasticsearch-saps.saude.gov.br/desc-notificacoes-esusve-*/_search?scroll=1m'
+        self._url2 = 'https://elasticsearch-saps.saude.gov.br/desc-notificacoes-esusve-*/_search?scroll -d'
         self._dados = self.get_dados_service()
         self._con = Conexao.Conexao().conectar()
+        self._scroll_id = ''
 
     def get_dados_service(self):
 
@@ -47,8 +50,8 @@ class InsereBD(Thread):
 
     def persistir(self):
         dados = self.get_dados_service()
-        '''for x in range(len(dados['hits']['hits'])):
-            print(dados['hits']['hits'][x]['_source']['resultadoTeste'])'''
+        self._scroll_id = dados['_scroll_id']
+
         self.constroi_objetos(dados)
 
     def constroi_objetos(self, dados_tratados):
@@ -204,7 +207,7 @@ class InsereBD(Thread):
             return'Curado'
     '''
 
-
-t = InsereBD()
-
-t.persistir()
+    def iniciar(self):
+        while(True):
+            self.persistir()
+            time.sleep(65)

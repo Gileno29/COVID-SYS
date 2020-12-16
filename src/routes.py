@@ -9,6 +9,8 @@ import json
 
 app = Flask(__name__)
 
+user = ''
+
 
 @app.route("/paciente", methods=["GET"])
 def olaMundo():
@@ -21,18 +23,18 @@ def olaMundo():
     return y
 
 
-@app.route("/")
 @app.route("/dados")
 def index():
     f = Filtro()
     dados_sexo = f.calcula_morte_sexo()
     dados_sintomas = f.calcula_morte_sintomas()
-    print(dados_sintomas)
+
+   # print(dados_sintomas)
 
     return render_template('segtela.html', mulher=dados_sexo['mulher'],
                            homem=dados_sexo['homem'], febre=dados_sintomas['febre'], dor_garganta=dados_sintomas['dor_garganta'],
                            tosse=dados_sintomas['tosse'], dispineia=dados_sintomas['dispineia'],
-                           outros=dados_sintomas['outros'])
+                           outros=dados_sintomas['outros'], img=user)
 
 
 @app.route("/busca-estado", methods=["GET", "POST"])
@@ -44,7 +46,7 @@ def dados_estado():
         f = Filtro()
         dados_sexo = f.calcula_morte_sexo(estado)
         dados_sintomas = f.calcula_morte_sintomas(estado)
-        dados_idade = f.calcula_morte_por_idade(estado)
+        dados_idade = f.calcular_morte_por_idade(estado)
         return render_template('segtela.html', mulher=dados_sexo['mulher'], homem=dados_sexo['homem'],
                                febre=dados_sintomas['febre'], dor_garganta=dados_sintomas['dor_garganta'],
                                tosse=dados_sintomas['tosse'], dispineia=dados_sintomas['dispineia'],
@@ -57,6 +59,16 @@ def dados_estado():
         return 'METHOD POST DONT EXIST'
 
 
+@app.route("/logado", methods=["GET", "POST"])
+def logado():
+    if request.method == 'POST':
+        global user
+        user = request.form['imagem']
+
+    return redirect("/dados")
+
+
+@app.route("/")
 @app.route("/login")
 def login():
     return render_template('index.html')
