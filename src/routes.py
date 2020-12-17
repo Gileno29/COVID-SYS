@@ -30,7 +30,7 @@ def index():
     dados_sintomas = f.calcula_morte_sintomas()
     dados_idade = f.calcular_morte_por_idade()
     dados_por_mes = f.quantidade_obtos_mes()
-    print("dados por mes", dados_por_mes)
+    infectados = f.quantidade_infectados()
     return render_template('segtela.html', mulher=dados_sexo['mulher'], homem=dados_sexo['homem'],
                            febre=dados_sintomas['febre'], dor_garganta=dados_sintomas['dor_garganta'],
                            tosse=dados_sintomas['tosse'], dispineia=dados_sintomas['dispineia'],
@@ -41,7 +41,7 @@ def index():
         marco=dados_por_mes['marco'], abril=dados_por_mes['abril'], maio=dados_por_mes['maio'],
         junho=dados_por_mes['junho'], julho=dados_por_mes['julho'], agosto=dados_por_mes['agosto'],
         setembro=dados_por_mes['setembro'], outubro=dados_por_mes['outubro'],
-        novembro=dados_por_mes['novembro'], dezembro=dados_por_mes['dezembro'])
+        novembro=dados_por_mes['novembro'], dezembro=dados_por_mes['dezembro'], infectados=infectados['infectados'])
 
 
 @app.route("/busca-estado", methods=["GET", "POST"])
@@ -55,7 +55,7 @@ def dados_estado():
         dados_sintomas = f.calcula_morte_sintomas(estado)
         dados_idade = f.calcular_morte_por_idade(estado)
         dados_por_mes = f.quantidade_obtos_mes(estado)
-        print("dados por mes", dados_por_mes)
+        infectados = f.quantidade_infectados()
         return render_template('segtela.html', mulher=dados_sexo['mulher'], homem=dados_sexo['homem'],
                                febre=dados_sintomas['febre'], dor_garganta=dados_sintomas['dor_garganta'],
                                tosse=dados_sintomas['tosse'], dispineia=dados_sintomas['dispineia'],
@@ -66,7 +66,7 @@ def dados_estado():
                                marco=dados_por_mes['marco'], abril=dados_por_mes['abril'], maio=dados_por_mes['maio'],
                                junho=dados_por_mes['junho'], julho=dados_por_mes['julho'], agosto=dados_por_mes['agosto'],
                                setembro=dados_por_mes['setembro'], outubro=dados_por_mes['outubro'],
-                               novembro=dados_por_mes['novembro'], dezembro=dados_por_mes['dezembro'])
+                               novembro=dados_por_mes['novembro'], dezembro=dados_por_mes['dezembro'], infectados=infectados['infectados'])
 
     # return render_template('apreensaoForm.html', titulo='Nova Apreensao')
     else:
