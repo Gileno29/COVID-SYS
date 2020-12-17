@@ -18,6 +18,29 @@
    <meta name="google-signin-client_id" content="1071071328035-8m2g4i3od3mduj7nbh8t299bgpjp25gd.apps.googleusercontent.com">
    <script src="https://apis.google.com/js/platform.js" async defer></script>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- login google -->
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+   <meta name="google-signin-client_id" content="953818940393-rj5g3d585oi0av1on726v4pm5j5v356q.apps.googleusercontent.com">
+   <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script>
+
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+            //document.getElementById('imagem').value=profile.getImageUrl();
+            document.getElementById('deslogar').submit();
+            console.log('User signed out.');
+        });
+    }
+
+    function onLoad() {
+      gapi.load('auth2', function() {
+        gapi.auth2.init();
+      });
+    }
+
+    </script>
+    <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
 </head>
 
 <body id="page-top" class="white" onload="grafico('{{homem}}', '{{mulher}}');
@@ -30,14 +53,16 @@
                     <div class="container-fluid"><img src="{{ url_for('static', filename='img/avatars/copia.jpg')}}" height="60" width="150">
                       
                             <li class="nav-item dropdown no-arrow" role="presentation">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#">
+                                <div class="nav-item dropdown no-arrow">
 								<span class="d-none d-lg-inline mr-2 text-gray-600 small">Valerie Luna</span>
-								<img class="border rounded-circle img-profile" src="{{img}}"></a>
-                                    <div
-                                        class="dropdown-menu shadow dropdown-menu-right animated--grow-in" role="menu">
-                                      
-                                            <a class="dropdown-item" role="presentation" href="#"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Sair</a></div>
-                    </div>
+                                <img class="border rounded-circle " src="{{img}}"></a>
+                                <form action="/deslogado" id="logado" method="POST" class="">
+                                            <input type="hidden" id="deslogado" name="deslogado">
+                                            
+                                            <button action='submit' class="btn btn-primary" onclick="signOut();" id="deslogar">sair</button>
+                                   
+                                </form>
+                             </div>
                     </li>
                     </ul></div>
             </nav>

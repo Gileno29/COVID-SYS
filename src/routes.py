@@ -75,6 +75,11 @@ def login():
     return render_template('index.html')
 
 
+@app.route("/deslogado",  methods=["GET", "POST"])
+def deslogado():
+    return redirect('/login')
+
+
 def myconverter(o):
     return o.__str__()
 
