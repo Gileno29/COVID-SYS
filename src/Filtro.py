@@ -192,7 +192,22 @@ class Filtro:
 
         return total
 
+    def quantidade_infectados(self):
+        total = {}
+        infectados = 0
+        dados = self._busca.buscar_infectados()
+        # print(dados)
+        for x in range(len(dados)):
+            # print(dados[0])
+            if(dados[x][0] == "Positivo"):
+                #print("Valor dos dados", dados)
+                infectados = infectados + 1
+               # print(infectados)
 
-#f = Filtro()
+        total = {'infectados': infectados}
+        return total
 
-# f.calcular_morte_por_idade()
+
+f = Filtro()
+
+f.quantidade_infectados()

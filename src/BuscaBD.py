@@ -141,6 +141,15 @@ class BuscaBD:
 
         return result
 
+    def buscar_infectados(self):
+        query = "select ex.ex_resultado from exame as ex where ex.ex_resultado like '%Positivo%'; "
+        conect = self._con.conectar()
+        cursor = conect.cursor(buffered=True)
+        cursor.execute(query)
+        result = cursor.fetchall()
+
+        return result
+
     '''def convet_to_json(self, result):
         obj = '{' + ', '.join('"{}": "{}"'.format(k, v)
                               for k, v in result) + '}'

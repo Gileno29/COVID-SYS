@@ -28,13 +28,14 @@ def index():
     f = Filtro()
     dados_sexo = f.calcula_morte_sexo()
     dados_sintomas = f.calcula_morte_sintomas()
+    dados_infectados = f.quantidade_infectados()
 
    # print(dados_sintomas)
 
     return render_template('segtela.html', mulher=dados_sexo['mulher'],
                            homem=dados_sexo['homem'], febre=dados_sintomas['febre'], dor_garganta=dados_sintomas['dor_garganta'],
                            tosse=dados_sintomas['tosse'], dispineia=dados_sintomas['dispineia'],
-                           outros=dados_sintomas['outros'], img=user)
+                           outros=dados_sintomas['outros'], img=user, infectados=dados_infectados['infectados'])
 
 
 @app.route("/busca-estado", methods=["GET", "POST"])
