@@ -167,3 +167,100 @@
         });
         } 
     }
+
+    function grafico_mortalidade_mes(janeiro, fevereiro, marco,
+    abril, maio, junho, julho, agosto,setembro,outubro,novembro,dezembro){  
+        var Line = document.getElementById("mes");
+        var chartData = {
+        labels: ["janeiro", "fevereiro", "marco",
+            "abril", "maio", "junho", "julho", "agosto","setembro","outubro","novembro","dezembro"],
+        datasets: [{
+            data: [0,janeiro],
+            backgroundColor: 'rgba(0, 200, 200, 0.5)',
+            
+        },
+        {
+             data: [0,fevereiro],
+            backgroundColor: 'rgba(255, 0, 0 , 0.5)',
+            },
+            
+            {
+                data: [0,marco],
+                backgroundColor: 'rgba(0, 255, 127 , 0.5)',
+               },
+            {
+                data: [0,abril],
+                backgroundColor: 'rgba(255, 0, 255, 0.5)',
+               },
+            {
+                data: [0,maio],
+                backgroundColor: 'rgba(255, 255, 0 , 0.5)',
+               },
+            {
+                data: [0,junho],
+                backgroundColor: 'rgba(255, 255, 0 , 0.5)',
+               },
+            {
+                data: [0,julho],
+                backgroundColor: 'rgba(255, 255, 0 , 0.5)',
+               },
+            {
+                data: [0,agosto],
+                backgroundColor: 'rgba(255, 255, 0 , 0.5)',
+               },
+            {
+                data: [0,setembro],
+                backgroundColor: 'rgba(255, 255, 0 , 0.5)',
+               },
+            {
+                data: [0,outubro],
+                backgroundColor: 'rgba(255, 255, 0 , 0.5)',
+               },
+            {
+                data: [0,novembro],
+                backgroundColor: 'rgba(255, 255, 0 , 0.5)',
+               },
+            {
+                data: [0,dezembro],
+                backgroundColor: 'rgba(255, 255, 0 , 0.5)',
+               }  
+            
+        ],
+
+        
+        Styling:[{
+            backgroundColor: 'rgba(0, 2, 200, 0.5)',
+
+
+        }]
+
+       
+
+        };
+        if (Line) {
+        new Chart(Line, {
+        type: 'line',
+        data: chartData,
+        styling: {
+            backgroundColor: '#20B2AA'
+        },
+        options: {
+            scales: {
+            yAxes: [{
+                stacked: true,
+                ticks:{
+                    suggestedMin: 0,
+                    suggestedMax: 5
+                } 
+            },
+            
+            ]
+            },
+            legend: {
+            display: false
+            }
+        }
+        });
+        } 
+    }
+

@@ -1,4 +1,5 @@
 from BuscaBD import BuscaBD
+from datetime import datetime
 
 
 class Filtro:
@@ -149,13 +150,85 @@ class Filtro:
         for x in range(len(dados)):
 
             if(dados[x][0] == "Positivo"):
-
                 infectados = infectados + 1
 
         total = {'infectados': infectados}
         return total
 
+    def quantidade_obtos_mes(self, estado=None):
+        total = {}
+        janeiro = 0
+        fevereiro = 0
+        marco = 0
+        abril = 0
+        maio = 0
+        junho = 0
+        julho = 0
+        agosto = 0
+        setembro = 0
+        outubro = 0
+        novembro = 0
+        dezembro = 0
+        dados = []
+        # print(dados)
+        if(estado is not None):
+            dados = self._busca.buscar_obtos_mes(estado)
+
+        else:
+            dados = self._busca.buscar_obtos_mes()
+
+        for x in range(len(dados)):
+
+            if(dados[x][0] == "Positivo" and dados[x][1] == "Óbito"):
+                #print("esses são os dados por mes", dados[x][1])
+                data_str = dados[x][2].strftime("%Y-%m-%d")
+                data_list = data_str.split('-')
+                #print("Esses são os dados da lista", data_list[1])
+                if(data_list[1] == '01'):
+                    janeiro = janeiro + 1
+
+                elif(data_list[1] == '02'):
+                    fevereiro = fevereiro + 1
+
+                elif(data_list[1] == '03'):
+                    marco = marco + 1
+
+                elif(data_list[1] == '04'):
+                    abril = abril + 1
+
+                elif(data_list[1] == '05'):
+                    maio = maio + 1
+
+                elif(data_list[1] == '06'):
+                    junho = junho + 1
+
+                elif(data_list[1] == '07'):
+                    julho = julho + 1
+
+                elif(data_list[1] == '08'):
+                    agosto = agosto + 1
+
+                elif(data_list[1] == '09'):
+                    setembro = setembro + 1
+
+                elif(data_list[1] == '10'):
+                    outubro = outubro + 1
+
+                elif(data_list[1] == '11'):
+                    novembro = novembro + 1
+
+                elif(data_list[1] == '12'):
+                    dezembro = dezembro + 1
+
+                # print(data_list)
+
+        total = {'janeiro': janeiro, 'fevereiro': fevereiro, 'marco': marco, 'abril':
+                 abril, 'maio': maio, 'junho': junho, 'julho': julho, 'agosto': agosto,
+                 'setembro': setembro, 'outubro': outubro, 'novembro': novembro, 'dezembro': dezembro}
+
+        return total
+
 
 f = Filtro()
 
-f.quantidade_infectados()
+f.quantidade_obtos_mes()

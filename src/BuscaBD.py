@@ -150,10 +150,27 @@ class BuscaBD:
 
         return result
 
-    '''def convet_to_json(self, result):
-        obj = '{' + ', '.join('"{}": "{}"'.format(k, v)
-                              for k, v in result) + '}'
-        print(obj)'''
+    def buscar_obtos_mes(self, estado=None):
+        query = "select ex.ex_resultado, ex.ex_evolucao_caso, ex_dt_encerramento from exame as ex where ex.ex_resultado like '%Positivo%'; "
+        conect = self._con.conectar()
+        cursor = conect.cursor(buffered=True)
+        cursor.execute(query)
+        result = []
+        if(estado is not None):
+            estados = {'RN': 'Rio Grande Do Norte',
+                       'AC': 'Acre', 'SP': 'Sao Paulo', 'PB': 'Paraiba'}
+            if(estado in estados):
+                print('Checando a lista por idade')
+                val = (estados[estado],)
+                query = "SELECT  p.paciente_id, ex.ex_evolucao_caso, ex.ex_resultado,ex.ex_dt_encerramento, e.end_estado FROM  paciente as p, exame as ex, endereco as e  where ex.ex_fk_paciente_id = p.paciente_id and e.end_estado like %s and p.paciente_fk_endid = end_id; "
+                cursor.execute(query, val)
+                result = cursor.fetchall()
+        else:
+            query = "select ex.ex_resultado, ex.ex_evolucao_caso, ex_dt_encerramento from exame as ex where ex.ex_resultado like '%Positivo%'; "
+            cursor.execute(query)
+            result = cursor.fetchall()
+
+        return result
 
 
 """
