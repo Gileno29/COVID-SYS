@@ -47,7 +47,8 @@
                                           grafico_mortalidade_sintomas('{{febre}}', '{{tosse}}','{{dor_garganta}}', '{{dispineia}}','{{outros}}');
                                           mortes_por_idade('{{idade0A25}}','{{idade26A30}}','{{idade31A40}}','{{idade41A60}}', '{{maisDe60}}'),
                                           grafico_mortalidade_mes('{{janeiro}}','{{fevereiro}}','{{marco}}','{{abril}}','{{maio}}', '{{junho}}',
-                                         '{{julho}}','{{agosto}}','{{setembro}}','{{outubo}}', '{{novembro}}', '{{dezembro}}')" >
+                                         '{{julho}}','{{agosto}}','{{setembro}}','{{outubo}}', '{{novembro}}', '{{dezembro}}'),
+                                          grafico_mortalidade_raca('{{parda}}','{{branca}}','{{negra}}','{{indefinida}}')" >
     <div id="wrapper">
         <div class="d-flex flex-column" id="content-wrapper">
             <div id="content">
@@ -188,6 +189,14 @@
                 
                             </div>
                             <div class="card-body">
+                                <div class="col-md-8 d-inline-block ">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <canvas id="raca" ></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         
                             </div>
                         </div>

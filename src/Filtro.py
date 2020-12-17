@@ -45,7 +45,7 @@ class Filtro:
         outros = 0
         if(estado is not None):
             dados = self._busca.buscar_obtos_sintomas(estado)
-            #print("O estado é", estado)
+            # print("O estado é", estado)
         else:
             dados = self._busca.buscar_obtos_sintomas()
         # print(dados)
@@ -180,10 +180,10 @@ class Filtro:
         for x in range(len(dados)):
 
             if(dados[x][0] == "Positivo" and dados[x][1] == "Óbito"):
-                #print("esses são os dados por mes", dados[x][1])
+                # print("esses são os dados por mes", dados[x][1])
                 data_str = dados[x][2].strftime("%Y-%m-%d")
                 data_list = data_str.split('-')
-                #print("Esses são os dados da lista", data_list[1])
+                # print("Esses são os dados da lista", data_list[1])
                 if(data_list[1] == '01'):
                     janeiro = janeiro + 1
 
@@ -228,7 +228,33 @@ class Filtro:
 
         return total
 
+    def calcula_obtos_raca(self, estado=None):
+        parda = 0
+        branca = 0
+        negra = 0
+        indefinida = 0
+        total = {}
+        if(estado is not None):
+            dados = self._busca.buscar_obtos_raca(estado)
+        else:
+            dados = self._busca.buscar_obtos_raca()
+        for x in range(len(dados)):
+            if(dados[x][1] == "Positivo" and dados[x][2] == "Óbito"):
+
+                if(dados[x][0] == "Parda"):
+                    parda = parda + 1
+                elif(dados[x][0] == "Branca"):
+                    branca = branca + 1
+                elif(dados[x][0] == "Preta"):
+                    negra = negra + 1
+                elif(dados[x][0] == "Preta"):
+                    indefinida = indefinida + 1
+
+        total = {'parda': parda, 'branca': branca,
+                 'negra': negra, 'indefinida': indefinida}
+        return total
+
 
 f = Filtro()
 
-f.quantidade_obtos_mes()
+f.calcula_obtos_raca()

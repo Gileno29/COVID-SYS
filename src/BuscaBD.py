@@ -151,10 +151,9 @@ class BuscaBD:
         return result
 
     def buscar_obtos_mes(self, estado=None):
-        query = "select ex.ex_resultado, ex.ex_evolucao_caso, ex_dt_encerramento from exame as ex where ex.ex_resultado like '%Positivo%'; "
+        query = ""
         conect = self._con.conectar()
         cursor = conect.cursor(buffered=True)
-        cursor.execute(query)
         result = []
         if(estado is not None):
             estados = {'RN': 'Rio Grande Do Norte',
@@ -167,6 +166,27 @@ class BuscaBD:
                 result = cursor.fetchall()
         else:
             query = "select ex.ex_resultado, ex.ex_evolucao_caso, ex_dt_encerramento from exame as ex where ex.ex_resultado like '%Positivo%'; "
+            cursor.execute(query)
+            result = cursor.fetchall()
+
+        return result
+
+    def buscar_obtos_raca(self, estado=None):
+        query = ""
+        conect = self._con.conectar()
+        cursor = conect.cursor(buffered=True)
+        result = []
+        if(estado is not None):
+            estados = {'RN': 'Rio Grande Do Norte',
+                       'AC': 'Acre', 'SP': 'Sao Paulo', 'PB': 'Paraiba'}
+            if(estado in estados):
+                print('Checando a lista por raca')
+                val = (estados[estado],)
+                query = "SELECT  p.paciente_raca,  ex.ex_resultado, ex.ex_evolucao_caso, e.end_estado FROM  paciente as p, exame as ex, endereco as e  where ex.ex_fk_paciente_id = p.paciente_id and e.end_estado like %s and p.paciente_fk_endid = end_id; "
+                cursor.execute(query, val)
+                result = cursor.fetchall()
+        else:
+            query = "select p.paciente_raca, ex.ex_resultado, ex.ex_evolucao_caso from paciente as p, exame as ex where ex.ex_fk_paciente_id=p.paciente_id; "
             cursor.execute(query)
             result = cursor.fetchall()
 

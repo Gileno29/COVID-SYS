@@ -264,3 +264,51 @@
         } 
     }
 
+    function grafico_mortalidade_raca(parda, branca, negra,indefinida){  
+            var Line = document.getElementById("raca");
+            var chartData = {
+            labels: ["parda", "branca", "negra","indefinida"],
+            datasets: [{
+                data: [parda,branca,negra,indefinida],
+                backgroundColor: 'rgba(0, 200, 200, 0.5)',
+                
+            },
+                
+            ],
+    
+            
+            Styling:[{
+                backgroundColor: 'rgba(0, 2, 200, 0.5)',
+    
+    
+            }]
+    
+           
+    
+            };
+            if (Line) {
+            new Chart(Line, {
+            type: 'line',
+            data: chartData,
+            styling: {
+                backgroundColor: '#20B2AA'
+            },
+            options: {
+                scales: {
+                yAxes: [{
+                    stacked: true,
+                    ticks:{
+                        suggestedMin: 0,
+                        suggestedMax: 5
+                    } 
+                },
+                
+                ]
+                },
+                legend: {
+                display: false
+                }
+            }
+            });
+            } 
+        }
