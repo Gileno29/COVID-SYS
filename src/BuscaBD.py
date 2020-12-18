@@ -13,23 +13,49 @@ class BuscaBD:
     def buscar_paciente(self, id=0):
         identificador = id
         conect = self._con.conectar()
-
         cursor = conect.cursor(buffered=True)
-        query_select_by_id = "SELECT * FROM paciente WHERE id= %s;"
-        query_select_paciente = "SELECT p.paciente_cbo, p.paciente_sexo, p.paciente_idade, e.end_municipio, e.end_estado, ex.ex_dt_notificacao, ex.ex_dt_ini_sintomas, ex.ex_resultado  FROM endereco as e, paciente as p, exame as ex  where e.end_id= p.paciente_fk_endid AND ex. ex_fk_paciente_id=p.paciente_id;"
+        query_select_by_id = "SELECT * FROM paciente WHERE paciente_id= %s;"
+        query_select_end_by_id = "SELECT e.end_id, e.end_estado, e.end_municipio, p.paciente_id from endereco as e, paciente as p where p.paciente_fk_endid= e.end_id and e.end_id=%s;"
 
+        query_select_paciente = "SELECT p.paciente_id, p.paciente_cbo, p.paciente_sexo, p.paciente_idade, e.end_municipio, e.end_estado, ex.ex_dt_notificacao, ex.ex_dt_ini_sintomas, ex.ex_resultado  FROM endereco as e, paciente as p, exame as ex  where e.end_id= p.paciente_fk_endid AND ex. ex_fk_paciente_id=p.paciente_id;"
+
+        query_select_ALL = "SELECT p.paciente_id, p.paciente_cbo, p.paciente_sexo, p.paciente_idade,p.paciente_profissional_de_saude,p.paciente_raca, e.end_id, e.end_estado, e.end_municipio from paciente as p, endereco as e where p.paciente_fk_endid= e.end_id"
+
+        paciente = {'id': '', 'cbo': '', 'sexo': '', 'idade': 0,
+                    'profissional_de_saude': '', 'profissional_seguranca': '',
+                    'raca': '', 'endereco': {'end_id': '', 'estado': '', 'municipio': ''}}
+
+        paciente_result = []
+        end_result = []
         if (id != 0):
+
             val = (identificador,)
             cursor.execute(query_select_by_id, val)
+            paciente_result = cursor.fetchone()
 
-            result_paciente = cursor.fetchone()
+            cursor.execute(query_select_end_by_id, val)
+            end_result = cursor.fetchone()
 
-            return result_paciente
+            paciente = {'id': paciente_result[0], 'cbo': paciente_result[1], 'sexo': paciente_result[2],
+                        'idade': paciente_result[3], 'profissional_de_saude': paciente_result[4],
+                        'profissional_seguranca': paciente_result[5], 'raca': paciente_result[6],
+                        'endereco': {'end_id': end_result[0], 'estado': end_result[1], 'muncipio': end_result[2]}}
+
+            return paciente
         else:
 
-            cursor.execute(query_select_paciente)
-            result = cursor.fetchall()
-            return result
+            cursor.execute(query_select_ALL)
+            paciente_result = cursor.fetchall()
+            pacientes = []
+            p = {}
+            for x in range(len(paciente_result)):
+                print(len(paciente_result))
+                print(paciente_result)
+                p = {'id': paciente_result[0], 'cbo': paciente_result[1], 'sexo': paciente_result[2],
+                     'idade': paciente_result[3], 'profissional_de_saude': paciente_result[4], 'raca': paciente_result[5],
+                     'end_id': paciente_result[6], 'estado': paciente_result[7], 'muncipio': paciente_result[8]}
+                pacientes.append(p)
+            return pacientes
 
     def buscar_endereco(self, id_endereco=0, id_paciente=0):
         conect = self._con.conectar()
@@ -193,7 +219,5 @@ class BuscaBD:
         return result
 
 
-"""
 con = BuscaBD()
-con.buscar_paciente()
-"""
+con.buscar_paciente(10)

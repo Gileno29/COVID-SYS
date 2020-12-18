@@ -1,5 +1,6 @@
 from flask import render_template
 from flask import Flask
+from flask import jsonify
 from flask import request
 from flask import redirect
 from Filtro import Filtro
@@ -10,21 +11,37 @@ import json
 app = Flask(__name__)
 
 user = ''
+user_name=''
+autenticado=bool
 
 
-@app.route("/paciente", methods=["GET"])
+@app.route("/pacientes/all/info", methods=["GET"])
 def olaMundo():
     con = BuscaBD()
-    #result = con.buscar_paciente()
+    # result = con.buscar_paciente()
     # print(result)
-    y = json.dumps(con.buscar_paciente(), indent=4,
-                   sort_keys=True, default=myconverter)
+   # y = json.dumps(con.buscar_paciente(), indent=4,
+    # sort_keys = True, default = myconverter)
+    y = con.buscar_paciente()
 
-    return y
+    return jsonify(y)
 
 
-@app.route("/dados")
+@ app.route("/pacientes/<int:id>/info", methods=["GET"])
+def route_edit_user(id):
+    id = id
+    con = BuscaBD()
+    result = con.buscar_paciente(id)
+    # msg = "You want to edit the user with ID: {} | Arg type: {}".format(
+    # id, type(id))
+    print(result)
+    return jsonify(result)
+
+
+@ app.route("/dados")
 def index():
+    if(autenticado==False):
+        return render_template('index.html')
     f = Filtro()
     dados_sexo = f.calcula_morte_sexo()
     dados_sintomas = f.calcula_morte_sintomas()
@@ -32,6 +49,7 @@ def index():
     dados_por_mes = f.quantidade_obtos_mes()
     infectados = f.quantidade_infectados()
     dados_raca = f.calcula_obtos_raca()
+    
     return render_template('segtela.html', mulher=dados_sexo['mulher'], homem=dados_sexo['homem'],
                            febre=dados_sintomas['febre'], dor_garganta=dados_sintomas['dor_garganta'],
                            tosse=dados_sintomas['tosse'], dispineia=dados_sintomas['dispineia'],
@@ -43,7 +61,7 @@ def index():
         junho=dados_por_mes['junho'], julho=dados_por_mes['julho'], agosto=dados_por_mes['agosto'],
         setembro=dados_por_mes['setembro'], outubro=dados_por_mes['outubro'],
         novembro=dados_por_mes['novembro'], dezembro=dados_por_mes['dezembro'], infectados=infectados['infectados'],
-        branca=dados_raca['branca'], parda=dados_raca['parda'], negra=dados_raca['negra'], indefinida=dados_raca['indefinida'])
+        branca=dados_raca['branca'], parda=dados_raca['parda'], negra=dados_raca['negra'], indefinida=dados_raca['indefinida'], img=user, user_name=user_name)
 
 
 @app.route("/busca-estado", methods=["GET", "POST"])
@@ -58,6 +76,7 @@ def dados_estado():
         dados_idade = f.calcular_morte_por_idade(estado)
         dados_por_mes = f.quantidade_obtos_mes(estado)
         infectados = f.quantidade_infectados()
+        dados_raca = f.calcula_obtos_raca(estado)
         return render_template('segtela.html', mulher=dados_sexo['mulher'], homem=dados_sexo['homem'],
                                febre=dados_sintomas['febre'], dor_garganta=dados_sintomas['dor_garganta'],
                                tosse=dados_sintomas['tosse'], dispineia=dados_sintomas['dispineia'],
@@ -68,7 +87,8 @@ def dados_estado():
                                marco=dados_por_mes['marco'], abril=dados_por_mes['abril'], maio=dados_por_mes['maio'],
                                junho=dados_por_mes['junho'], julho=dados_por_mes['julho'], agosto=dados_por_mes['agosto'],
                                setembro=dados_por_mes['setembro'], outubro=dados_por_mes['outubro'],
-                               novembro=dados_por_mes['novembro'], dezembro=dados_por_mes['dezembro'], infectados=infectados['infectados'])
+                               novembro=dados_por_mes['novembro'], dezembro=dados_por_mes['dezembro'], infectados=infectados['infectados'],
+                               branca=dados_raca['branca'], parda=dados_raca['parda'], negra=dados_raca['negra'], indefinida=dados_raca['indefinida'])
 
     # return render_template('apreensaoForm.html', titulo='Nova Apreensao')
     else:
@@ -80,6 +100,10 @@ def logado():
     if request.method == 'POST':
         global user
         user = request.form['imagem']
+        global user_name
+        user_name=request.form['nome']
+        global autenticado
+        autenticado=True
 
     return redirect("/dados")
 
@@ -92,6 +116,9 @@ def login():
 
 @app.route("/deslogado",  methods=["GET", "POST"])
 def deslogado():
+    global autenticado
+    autenticado=False
+
     return redirect('/login')
 
 

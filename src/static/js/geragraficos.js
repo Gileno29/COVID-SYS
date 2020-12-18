@@ -1,46 +1,19 @@
 
     function grafico_mortalidade_sintomas(febre, tosse, garganta, dispineia, outros){  
         var Line = document.getElementById("sintomas");
-        var chartData = {
+        var chartDataSintomas = {
         labels: ["Febre","Dor de Garganta", "Tosse", "Dispineia", "Outros"],
         datasets: [{
-            data: [0,febre],
-            backgroundColor: 'rgba(0, 200, 200, 0.5)',
-            
-        },
-        {
-             data: [0,tosse],
-            backgroundColor: 'rgba(255, 0, 0 , 0.5)',
-            },
-            
-            {
-                data: [0,garganta],
-                backgroundColor: 'rgba(0, 255, 127 , 0.5)',
-               },
-            {
-                data: [0,dispineia],
-                backgroundColor: 'rgba(255, 0, 255, 0.5)',
-               },
-            {
-                data: [0,outros],
-                backgroundColor: 'rgba(255, 255, 0 , 0.5)',
-               }   
+            data: [febre, tosse, garganta, dispineia, outros],
+            backgroundColor: 'rgba(0, 200, 200, 0.5)'}
         ],
 
-        
-        Styling:[{
-            backgroundColor: 'rgba(0, 2, 200, 0.5)',
 
-
-        }]
-
-       
-
-        };
+      };
         if (Line) {
         new Chart(Line, {
-        type: 'line',
-        data: chartData,
+        type: 'bar',
+        data: chartDataSintomas,
         styling: {
             backgroundColor: '#20B2AA'
         },
@@ -94,7 +67,7 @@
 
         if (chLine) {
         new Chart(chLine, {
-        type: 'polarArea',
+        type: 'bar',
         data: chartData,
         styling: {
             backgroundColor: '#20B2AA'
@@ -149,7 +122,7 @@
 
         if (radar) {
         new Chart(radar, {
-        type: 'radar',
+        type: 'bar',
         data: chartData,
         styling: {
             backgroundColor: '#20B2AA'
@@ -175,57 +148,11 @@
         labels: ["janeiro", "fevereiro", "marco",
             "abril", "maio", "junho", "julho", "agosto","setembro","outubro","novembro","dezembro"],
         datasets: [{
-            data: [0,janeiro],
+            data: [janeiro, fevereiro, marco,
+                abril, maio, junho, julho, agosto,setembro,outubro,novembro,dezembro],
             backgroundColor: 'rgba(0, 200, 200, 0.5)',
             
-        },
-        {
-             data: [0,fevereiro],
-            backgroundColor: 'rgba(255, 0, 0 , 0.5)',
-            },
-            
-            {
-                data: [0,marco],
-                backgroundColor: 'rgba(0, 255, 127 , 0.5)',
-               },
-            {
-                data: [0,abril],
-                backgroundColor: 'rgba(255, 0, 255, 0.5)',
-               },
-            {
-                data: [0,maio],
-                backgroundColor: 'rgba(255, 255, 0 , 0.5)',
-               },
-            {
-                data: [0,junho],
-                backgroundColor: 'rgba(255, 255, 0 , 0.5)',
-               },
-            {
-                data: [0,julho],
-                backgroundColor: 'rgba(255, 255, 0 , 0.5)',
-               },
-            {
-                data: [0,agosto],
-                backgroundColor: 'rgba(255, 255, 0 , 0.5)',
-               },
-            {
-                data: [0,setembro],
-                backgroundColor: 'rgba(255, 255, 0 , 0.5)',
-               },
-            {
-                data: [0,outubro],
-                backgroundColor: 'rgba(255, 255, 0 , 0.5)',
-               },
-            {
-                data: [0,novembro],
-                backgroundColor: 'rgba(255, 255, 0 , 0.5)',
-               },
-            {
-                data: [0,dezembro],
-                backgroundColor: 'rgba(255, 255, 0 , 0.5)',
-               }  
-            
-        ],
+        },],
 
         
         Styling:[{
@@ -239,7 +166,7 @@
         };
         if (Line) {
         new Chart(Line, {
-        type: 'line',
+        type: 'bar',
         data: chartData,
         styling: {
             backgroundColor: '#20B2AA'
@@ -247,7 +174,7 @@
         options: {
             scales: {
             yAxes: [{
-                stacked: true,
+                
                 ticks:{
                     suggestedMin: 0,
                     suggestedMax: 5
@@ -288,7 +215,7 @@
             };
             if (Line) {
             new Chart(Line, {
-            type: 'line',
+            type: 'bar',
             data: chartData,
             styling: {
                 backgroundColor: '#20B2AA'

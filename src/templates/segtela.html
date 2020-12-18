@@ -28,7 +28,7 @@
             var auth2 = gapi.auth2.getAuthInstance();
             auth2.signOut().then(function () {
             //document.getElementById('imagem').value=profile.getImageUrl();
-            document.getElementById('deslogar').submit();
+            //document.getElementById('deslogar').submit();
             console.log('User signed out.');
         });
     }
@@ -55,18 +55,19 @@
                 <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
                     <div class="container-fluid"><img src="{{ url_for('static', filename='img/avatars/copia.jpg')}}" height="60" width="150">
                       
-                            <li class="nav-item dropdown no-arrow" role="presentation">
+                            
                                 <div class="nav-item dropdown no-arrow">
-								<span class=" d-lg-inline mr-2 text-gray-600 small">Valerie Luna</span>
+								<span class=" d-lg-inline mr-2 text-gray-200 small">{{user_name}}</span>
                                 <img class="border rounded-circle " src="{{img}}"></a>
                                 <form action="/deslogado" id="logado" method="POST" class="">
-                                            <input type="hidden" id="deslogado" name="deslogado">
+                                           
+                                            <input type="hidden" id="desautenticado" name="desautenticado">
                                             
                                             <button action='submit' class="btn btn-primary" onclick="signOut();" id="deslogar">sair</button>
                                    
                                 </form>
                              </div>
-                    </li>
+                    
                     </ul></div>
             </nav>
    
@@ -87,10 +88,10 @@
                         <div class="form-group mx-sm-3 mb-2">
                             
                                 <div class="form-group">
-                                    <label for="" class="mr-5">digite a sigla do estado ex: RN</label ><input id='estado' name='estado'></input>
+                                    <label for="" class="mr-5"></label ><input id='estado' name='estado' placeholder="Digite a sigla do estado"></input>
                                 </div>
                         </div>
-                        <button type="submit" class="btn btn-primary mb-2">Buscar</button>
+                        <button type="submit" class="btn btn-primary mb-3 ml-2">Buscar</button>
                     </form>
                 </div>
                  <!---Fim Botao de pesquisa por estado-->
@@ -109,25 +110,19 @@
 				 <div class="col-lg-12 col-xl-12">
                         <div class="card shadow mb-4">
                             <div class="card-header d-flex justify-content-between align-items-center">
-                                <h6 class="text-primary font-weight-bold m-0">Taxa de mortalidade por sexo e taxa de mortalidade por sintomas</h6>
+                                <h6 class="text-primary font-weight-bold m-0">Taxa de mortalidade por sexo</h6>
                  
                             </div>
                             <div class="card-body ">
                                 <div class="container ">
-                                    <div class="col-md-4 d-inline-block">
+                                    <div class="col-md-8 d-inline-block">
                                         <div class="card">
                                             <div class="card-body">
                                                 <canvas id="chLine" ></canvas>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4 d-inline-block ">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <canvas id="sintomas" ></canvas>
-                                            </div>
-                                        </div>
-                                    </div>
+                                  
                                 </div>
                                 <div
                                     class="text-left small mt-4"><span class="mr-2"><i class="fas fa-circle mulher"></i>&nbsp;Feminino</span><span class="mr-2">
@@ -185,7 +180,7 @@
                     <div class="col-lg-12 col-xl-12">
                         <div class="card shadow mb-4">
                             <div class="card-header d-flex justify-content-between align-items-center">
-                                <h6 class="text-primary font-weight-bold m-0">Taxa de mortalidade por sintomas</h6>
+                                <h6 class="text-primary font-weight-bold m-0">Taxa de mortalidade por Raça</h6>
                 
                             </div>
                             <div class="card-body">
@@ -206,19 +201,16 @@
                     <div class="col-lg-12 col-xl-12">
                         <div class="card shadow mb-4">
                             <div class="card-header d-flex justify-content-between align-items-center">
-                                <h6 class="text-primary font-weight-bold m-0">Taxa de mortalidade por raça</h6>
-                               
+                                <h6 class="text-primary font-weight-bold m-0">Taxa de mortalidade por sintomas</h6>
                             </div>
                             <div class="card-body">
-                                <div class="chart-area"><canvas data-bs-chart="{&quot;type&quot;:&quot;line&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Branco&quot;,&quot;Preto&quot;,&quot;Pardo&quot;,&quot;Amarelo&quot;,&quot;Indígina&quot;],&quot;datasets&quot;:
-								[{&quot;label&quot;:&quot;Earnings&quot;,&quot;fill&quot;:true,&quot;data&quot;:
-								[&quot;0&quot;,&quot;10000&quot;,&quot;5000&quot;,&quot;15000&quot;,&quot;10000&quot;,&quot;20000&quot;,&quot;15000&quot;,&quot;25000&quot;],
-								&quot;backgroundColor&quot;:&quot;rgba(78, 115, 223, 0.05)&quot;,&quot;borderColor&quot;:
-								&quot;rgba(78, 115, 223, 1)&quot;}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false},&quot;title&quot;:{},&quot;scales&quot;:{&quot;xAxes&quot;:[{&quot;gridLines&quot;:
-								{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:
-								[&quot;2&quot;],&quot;drawOnChartArea&quot;:false},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;padding&quot;:20}}],&quot;yAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:
-								&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;]},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;padding&quot;:20}}]}}}"></canvas></div>
-                            </div>
+                                <div class="col-md-8 d-inline-block ">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <canvas id="sintomas" ></canvas>
+                                        </div>
+                                    </div>
+                                </div>
                         </div>
                     </div>
             </div>
@@ -226,29 +218,6 @@
    
 
         </div>
-    </div>
-
-    <div class="container">
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-body">
-                    <canvas id="chLine" ></canvas>
-                </div>
-            </div>
-        </div>
-     </div>     
-    </div>
-    <div class="container" >
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-body">
-                    <canvas id="sintomas" ></canvas>
-                </div>
-            </div>
-        </div>
-     </div>     
     </div>
     <footer class="bg-white sticky-footer">
         <div class="container my-auto">

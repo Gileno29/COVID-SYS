@@ -25,6 +25,8 @@
   if(profile.getEmail!=null){
     
     document.getElementById('imagem').value=profile.getImageUrl();
+    document.getElementById('nome').value=profile.getName();
+    document.getElementById('autenticado').value='autenticado';
     document.getElementById('logado').submit();
   }
   
@@ -63,6 +65,8 @@ function envia(){
                         <form action="/logado" id="logado"method="POST">
                             <h1 class="brand-heading black">SisCovid</h1>
                             <input type="hidden" id="imagem" name="imagem">
+                            <input type="hidden" id="nome" name="nome">
+                            <input type="hidden" id="autenticado" name="autenticado">
                             <p class="intro-text">Acesse informações sobre o covid-19 no Brasil.</p>
                             <div class="g-signin2" data-onsuccess="onSignIn">
 
