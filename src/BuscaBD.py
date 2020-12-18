@@ -184,6 +184,7 @@ class BuscaBD:
 
         return result
     def buscar_infectados_estado(self, estado='Rio Grande Do Norte'):
+        #faz a logica da quantidade de infectados por estado
         query = "SELECT  p.paciente_id, ex.ex_evolucao_caso, ex.ex_resultado,ex.ex_dt_encerramento, e.end_estado FROM  paciente as p, exame as ex, endereco as e  where ex.ex_fk_paciente_id = p.paciente_id and e.end_estado like %s and p.paciente_fk_endid = end_id; "
         conect = self._con.conectar()
         cursor = conect.cursor(buffered=True)
