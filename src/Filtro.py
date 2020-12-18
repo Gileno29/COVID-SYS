@@ -279,6 +279,21 @@ class Filtro:
         total={'infectados_estado':infectados_estado}
 
         return total
+
+    def calcula_obtos_estado(self, estado='Rio Grande Do Norte'):
+        dados=[]
+        obitos_estado=0
+        if(estado != 'Rio Grande Do Norte'):
+            dados = self._busca.buscar_obtos_estado(estado)
+        else:
+            dados = self._busca.buscar_obtos_estado()
+        for x in range(len(dados)):
+
+            if(dados[x][2] == "Positivo" and dados[x][1] == "Óbito"):
+                obitos_estado=obitos_estado + 1
+        total={'obitos_estado':obitos_estado}
+
+        return total
         
 f = Filtro()
 

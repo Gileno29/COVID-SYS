@@ -51,7 +51,7 @@ def index():
     dados_raca = f.calcula_obtos_raca()
     infectados_estado= f.calcula_infectados_estado()
     obitos=f.quantidade_obtos()
-    
+    obitos_estado= f.calcula_obtos_estado()
     return render_template('segtela.html', mulher=dados_sexo['mulher'], homem=dados_sexo['homem'],
                            febre=dados_sintomas['febre'], dor_garganta=dados_sintomas['dor_garganta'],
                            tosse=dados_sintomas['tosse'], dispineia=dados_sintomas['dispineia'],
@@ -64,7 +64,8 @@ def index():
         setembro=dados_por_mes['setembro'], outubro=dados_por_mes['outubro'],
         novembro=dados_por_mes['novembro'], dezembro=dados_por_mes['dezembro'], infectados=infectados['infectados'],
         branca=dados_raca['branca'], parda=dados_raca['parda'], negra=dados_raca['negra'], indefinida=dados_raca['indefinida'],
-        img=user, user_name=user_name, infectados_estado=infectados_estado['infectados_estado'], obitos=obitos['obitos'])
+        img=user, user_name=user_name, infectados_estado=infectados_estado['infectados_estado'],
+        obitos=obitos['obitos'],obitos_estado=obitos_estado['obitos_estado'])
 
 
 @app.route("/busca-estado", methods=["GET", "POST"])
@@ -83,6 +84,7 @@ def dados_estado():
         infectados_estado= f.calcula_infectados_estado(estado)
         infectados = f.quantidade_infectados()
         obitos=f.quantidade_obtos()
+        obitos_estado= f.calcula_obtos_estado(estado)
         return render_template('segtela.html', mulher=dados_sexo['mulher'], homem=dados_sexo['homem'],
                                febre=dados_sintomas['febre'], dor_garganta=dados_sintomas['dor_garganta'],
                                tosse=dados_sintomas['tosse'], dispineia=dados_sintomas['dispineia'],
@@ -96,7 +98,8 @@ def dados_estado():
                                 novembro=dados_por_mes['novembro'], dezembro=dados_por_mes['dezembro'], infectados=infectados['infectados'],
                                 branca=dados_raca['branca'], parda=dados_raca['parda'],
                                 negra=dados_raca['negra'], indefinida=dados_raca['indefinida'],
-                                infectados_estado=infectados_estado['infectados_estado'],obitos=obitos['obitos'])
+                                infectados_estado=infectados_estado['infectados_estado'],
+                                obitos=obitos['obitos'], obitos_estado=obitos_estado['obitos_estado'])
     else:
         return 'METHOD POST DONT EXIST'
 
