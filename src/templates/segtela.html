@@ -27,8 +27,7 @@
         function signOut() {
             var auth2 = gapi.auth2.getAuthInstance();
             auth2.signOut().then(function () {
-            //document.getElementById('imagem').value=profile.getImageUrl();
-            //document.getElementById('deslogar').submit();
+            
             console.log('User signed out.');
         });
     }
@@ -60,10 +59,8 @@
 								<span class=" d-lg-inline mr-2 text-gray-200 small">{{user_name}}</span>
                                 <img class="border rounded-circle " src="{{img}}"></a>
                                 <form action="/deslogado" id="logado" method="POST" class="">
-                                           
-                                            <input type="hidden" id="desautenticado" name="desautenticado">
                                             
-                                            <button action='submit' class="btn btn-primary" onclick="signOut();" id="deslogar">sair</button>
+                                    <button action='submit' class="btn btn-primary" onclick="signOut();" id="deslogar">sair</button>
                                    
                                 </form>
                              </div>
