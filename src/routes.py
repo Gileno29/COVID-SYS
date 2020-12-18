@@ -49,6 +49,8 @@ def index():
     dados_por_mes = f.quantidade_obtos_mes()
     infectados = f.quantidade_infectados()
     dados_raca = f.calcula_obtos_raca()
+    infectados_estado= f.calcula_infectados_estado()
+    obitos=f.quantidade_obtos()
     
     return render_template('segtela.html', mulher=dados_sexo['mulher'], homem=dados_sexo['homem'],
                            febre=dados_sintomas['febre'], dor_garganta=dados_sintomas['dor_garganta'],
@@ -61,7 +63,8 @@ def index():
         junho=dados_por_mes['junho'], julho=dados_por_mes['julho'], agosto=dados_por_mes['agosto'],
         setembro=dados_por_mes['setembro'], outubro=dados_por_mes['outubro'],
         novembro=dados_por_mes['novembro'], dezembro=dados_por_mes['dezembro'], infectados=infectados['infectados'],
-        branca=dados_raca['branca'], parda=dados_raca['parda'], negra=dados_raca['negra'], indefinida=dados_raca['indefinida'], img=user, user_name=user_name)
+        branca=dados_raca['branca'], parda=dados_raca['parda'], negra=dados_raca['negra'], indefinida=dados_raca['indefinida'],
+        img=user, user_name=user_name, infectados_estado=infectados_estado['infectados_estado'], obitos=obitos['obitos'])
 
 
 @app.route("/busca-estado", methods=["GET", "POST"])
@@ -75,8 +78,11 @@ def dados_estado():
         dados_sintomas = f.calcula_morte_sintomas(estado)
         dados_idade = f.calcular_morte_por_idade(estado)
         dados_por_mes = f.quantidade_obtos_mes(estado)
-        infectados = f.quantidade_infectados()
+        #print('dados por mês ',dados_por_mes )
         dados_raca = f.calcula_obtos_raca(estado)
+        infectados_estado= f.calcula_infectados_estado(estado)
+        infectados = f.quantidade_infectados()
+        obitos=f.quantidade_obtos()
         return render_template('segtela.html', mulher=dados_sexo['mulher'], homem=dados_sexo['homem'],
                                febre=dados_sintomas['febre'], dor_garganta=dados_sintomas['dor_garganta'],
                                tosse=dados_sintomas['tosse'], dispineia=dados_sintomas['dispineia'],
@@ -84,13 +90,13 @@ def dados_estado():
                                idade26A30=dados_idade['idade26A30'], idade31A40=dados_idade['idade31A40'],
                                idade41A60=dados_idade['idade41A60'], maisDe60=dados_idade[
                                    'maisDe60'], janeiro=dados_por_mes['janeiro'], fevereiro=dados_por_mes['fevereiro'],
-                               marco=dados_por_mes['marco'], abril=dados_por_mes['abril'], maio=dados_por_mes['maio'],
-                               junho=dados_por_mes['junho'], julho=dados_por_mes['julho'], agosto=dados_por_mes['agosto'],
-                               setembro=dados_por_mes['setembro'], outubro=dados_por_mes['outubro'],
-                               novembro=dados_por_mes['novembro'], dezembro=dados_por_mes['dezembro'], infectados=infectados['infectados'],
-                               branca=dados_raca['branca'], parda=dados_raca['parda'], negra=dados_raca['negra'], indefinida=dados_raca['indefinida'])
-
-    # return render_template('apreensaoForm.html', titulo='Nova Apreensao')
+                                marco=dados_por_mes['marco'], abril=dados_por_mes['abril'], maio=dados_por_mes['maio'],
+                                junho=dados_por_mes['junho'], julho=dados_por_mes['julho'], agosto=dados_por_mes['agosto'],
+                                setembro=dados_por_mes['setembro'], outubro=dados_por_mes['outubro'],
+                                novembro=dados_por_mes['novembro'], dezembro=dados_por_mes['dezembro'], infectados=infectados['infectados'],
+                                branca=dados_raca['branca'], parda=dados_raca['parda'],
+                                negra=dados_raca['negra'], indefinida=dados_raca['indefinida'],
+                                infectados_estado=infectados_estado['infectados_estado'],obitos=obitos['obitos'])
     else:
         return 'METHOD POST DONT EXIST'
 

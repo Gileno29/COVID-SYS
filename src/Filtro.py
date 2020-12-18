@@ -25,7 +25,7 @@ class Filtro:
 
         else:
             dados = self._busca.buscar_paciente_sexo()
-            print('estou aqqui')
+
         for x in range(len(dados)):
             if(dados[x][0] == "Feminino" and dados[x][1] == "Óbito" and dados[x][2] == "Positivo"):
                 m = m+1
@@ -45,10 +45,9 @@ class Filtro:
         outros = 0
         if(estado is not None):
             dados = self._busca.buscar_obtos_sintomas(estado)
-            # print("O estado é", estado)
+           
         else:
             dados = self._busca.buscar_obtos_sintomas()
-        # print(dados)
         for x in range(len(dados)):
             if(dados[x][2] == "Positivo" and dados[x][3] == "Óbito"):
                 dados_novos = dados[x][1].split(",")
@@ -155,6 +154,19 @@ class Filtro:
         total = {'infectados': infectados}
         return total
 
+    def quantidade_obtos(self):
+        total = {}
+        obito = 0
+        dados = self._busca.buscar_obtos()
+
+        for x in range(len(dados)):
+
+            if(dados[x][1] == "Óbito" and dados[x][0] == "Positivo"):
+                obito = obito + 1
+
+        total = {'obitos': obito}
+        return total
+
     def quantidade_obtos_mes(self, estado=None):
         total = {}
         janeiro = 0
@@ -170,20 +182,18 @@ class Filtro:
         novembro = 0
         dezembro = 0
         dados = []
-        # print(dados)
+        
         if(estado is not None):
             dados = self._busca.buscar_obtos_mes(estado)
-
+            #print(dados)
         else:
             dados = self._busca.buscar_obtos_mes()
 
         for x in range(len(dados)):
 
             if(dados[x][0] == "Positivo" and dados[x][1] == "Óbito"):
-                # print("esses são os dados por mes", dados[x][1])
                 data_str = dados[x][2].strftime("%Y-%m-%d")
                 data_list = data_str.split('-')
-                # print("Esses são os dados da lista", data_list[1])
                 if(data_list[1] == '01'):
                     janeiro = janeiro + 1
 
@@ -220,7 +230,7 @@ class Filtro:
                 elif(data_list[1] == '12'):
                     dezembro = dezembro + 1
 
-                # print(data_list)
+                
 
         total = {'janeiro': janeiro, 'fevereiro': fevereiro, 'marco': marco, 'abril':
                  abril, 'maio': maio, 'junho': junho, 'julho': julho, 'agosto': agosto,
@@ -254,7 +264,22 @@ class Filtro:
                  'negra': negra, 'indefinida': indefinida}
         return total
 
+    def calcula_infectados_estado(self, estado='Rio Grande Do Norte'):
+        dados=[]
+        infectados_estado=0
+        #print(dados)
+        if(estado != 'Rio Grande Do Norte'):
+            dados = self._busca.buscar_infectados_estado(estado)
+        else:
+            dados = self._busca.buscar_infectados_estado()
+        for x in range(len(dados)):
 
+            if(dados[x][2] == "Positivo"):
+                infectados_estado=infectados_estado + 1
+        total={'infectados_estado':infectados_estado}
+
+        return total
+        
 f = Filtro()
 
-f.calcula_obtos_raca()
+f.calcula_infectados_estado()

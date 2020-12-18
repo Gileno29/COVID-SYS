@@ -49,11 +49,11 @@ class BuscaBD:
             pacientes = []
             p = {}
             for x in range(len(paciente_result)):
-                print(len(paciente_result))
-                print(paciente_result)
-                p = {'id': paciente_result[0], 'cbo': paciente_result[1], 'sexo': paciente_result[2],
-                     'idade': paciente_result[3], 'profissional_de_saude': paciente_result[4], 'raca': paciente_result[5],
-                     'end_id': paciente_result[6], 'estado': paciente_result[7], 'muncipio': paciente_result[8]}
+                #print(len(paciente_result))
+                #print(paciente_result)
+                p = {'id': paciente_result[x][0], 'cbo': paciente_result[x][1], 'sexo': paciente_result[x][2],
+                     'idade': paciente_result[x][3], 'profissional_de_saude': paciente_result[x][4], 'raca': paciente_result[x][5],
+                     'end_id': paciente_result[x][6], 'estado': paciente_result[x][7], 'muncipio': paciente_result[x][8]}
                 pacientes.append(p)
             return pacientes
 
@@ -112,7 +112,6 @@ class BuscaBD:
         if(estado is not None):
             estados = {'RN': 'Rio Grande Do Norte', 'AC': 'Acre'}
             if(estado in estados):
-                print('Checando a lista por sexo')
                 val = (estados[estado],)
                 query_select_paciente = "SELECT  p.paciente_sexo, ex.ex_evolucao_caso, ex_resultado, e.end_estado FROM  paciente as p, exame as ex, endereco as e  where ex.ex_fk_paciente_id = p.paciente_id and e.end_estado like %s and p.paciente_fk_endid = end_id limit 6000"
                 cursor.execute(query_select_paciente, val)
@@ -131,14 +130,15 @@ class BuscaBD:
         if(estado is not None):
             estados = {'RN': 'Rio Grande Do Norte', 'AC': 'Acre'}
             if(estado in estados):
-                print('Checando a lista')
+                
                 val = (estados[estado],)
                 query_select_paciente = "SELECT  p.paciente_sexo, ex.ex_sintomas, ex.ex_resultado, ex.ex_evolucao_caso, e.end_estado FROM  paciente as p, exame as ex, endereco as e  where ex. ex_fk_paciente_id=p.paciente_id and e.end_estado like %s and p.paciente_fk_endid = end_id limit 6000;"
                 cursor = conect.cursor(buffered=True)
                 cursor.execute(query_select_paciente, val)
                 result = cursor.fetchall()
             else:
-                print('Não existe esse estado')
+                pass
+               
         else:
             query_select_paciente = "SELECT  p.paciente_sexo, ex.ex_sintomas, ex.ex_resultado, ex.ex_evolucao_caso FROM  paciente as p, exame as ex  where ex. ex_fk_paciente_id=p.paciente_id;"
             cursor = conect.cursor(buffered=True)
@@ -155,7 +155,6 @@ class BuscaBD:
         if(estado is not None):
             estados = {'RN': 'Rio Grande Do Norte', 'AC': 'Acre'}
             if(estado in estados):
-                print('Checando a lista por idade')
                 val = (estados[estado],)
                 query_select_paciente = "SELECT  p.paciente_idade, ex.ex_evolucao_caso, ex_resultado, e.end_estado FROM  paciente as p, exame as ex, endereco as e  where ex.ex_fk_paciente_id = p.paciente_id and e.end_estado like %s and p.paciente_fk_endid = end_id limit 6000"
                 cursor.execute(query_select_paciente, val)
@@ -176,6 +175,34 @@ class BuscaBD:
 
         return result
 
+    def buscar_obtos(self):
+        query = "select ex.ex_resultado, ex.ex_evolucao_caso from exame as ex where ex.ex_evolucao_caso like '%Óbito%'; "
+        conect = self._con.conectar()
+        cursor = conect.cursor(buffered=True)
+        cursor.execute(query)
+        result = cursor.fetchall()
+
+        return result
+    def buscar_infectados_estado(self, estado='Rio Grande Do Norte'):
+        query = "SELECT  p.paciente_id, ex.ex_evolucao_caso, ex.ex_resultado,ex.ex_dt_encerramento, e.end_estado FROM  paciente as p, exame as ex, endereco as e  where ex.ex_fk_paciente_id = p.paciente_id and e.end_estado like %s and p.paciente_fk_endid = end_id; "
+        conect = self._con.conectar()
+        cursor = conect.cursor(buffered=True)
+        val=(estado,)
+        result=[]
+        if(estado!='Rio Grande Do Norte'):
+                estados = {'RN': 'Rio Grande Do Norte',
+                       'AC': 'Acre', 'SP': 'Sao Paulo', 'PB': 'Paraiba'}
+                if(estado in estados):
+                    val = (estados[estado],)
+                    query = "SELECT  p.paciente_id, ex.ex_evolucao_caso, ex.ex_resultado, ex.ex_dt_encerramento, p.paciente_id, e.end_estado FROM  paciente as p, exame as ex, endereco as e  where ex.ex_fk_paciente_id = p.paciente_id and e.end_estado like %s and p.paciente_fk_endid = end_id; "
+                    cursor.execute(query, val)
+                    result = cursor.fetchall()
+        else:
+
+            cursor.execute(query, val)
+            result = cursor.fetchall()
+        
+        return result
     def buscar_obtos_mes(self, estado=None):
         query = ""
         conect = self._con.conectar()
@@ -185,9 +212,8 @@ class BuscaBD:
             estados = {'RN': 'Rio Grande Do Norte',
                        'AC': 'Acre', 'SP': 'Sao Paulo', 'PB': 'Paraiba'}
             if(estado in estados):
-                print('Checando a lista por idade')
                 val = (estados[estado],)
-                query = "SELECT  p.paciente_id, ex.ex_evolucao_caso, ex.ex_resultado,ex.ex_dt_encerramento, e.end_estado FROM  paciente as p, exame as ex, endereco as e  where ex.ex_fk_paciente_id = p.paciente_id and e.end_estado like %s and p.paciente_fk_endid = end_id; "
+                query = "SELECT  ex.ex_resultado, ex.ex_evolucao_caso, ex.ex_dt_encerramento, p.paciente_id, e.end_estado FROM  paciente as p, exame as ex, endereco as e  where ex.ex_fk_paciente_id = p.paciente_id and e.end_estado like %s and p.paciente_fk_endid = end_id; "
                 cursor.execute(query, val)
                 result = cursor.fetchall()
         else:
@@ -206,7 +232,6 @@ class BuscaBD:
             estados = {'RN': 'Rio Grande Do Norte',
                        'AC': 'Acre', 'SP': 'Sao Paulo', 'PB': 'Paraiba'}
             if(estado in estados):
-                print('Checando a lista por raca')
                 val = (estados[estado],)
                 query = "SELECT  p.paciente_raca,  ex.ex_resultado, ex.ex_evolucao_caso, e.end_estado FROM  paciente as p, exame as ex, endereco as e  where ex.ex_fk_paciente_id = p.paciente_id and e.end_estado like %s and p.paciente_fk_endid = end_id; "
                 cursor.execute(query, val)
