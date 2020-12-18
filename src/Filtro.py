@@ -185,7 +185,6 @@ class Filtro:
         
         if(estado is not None):
             dados = self._busca.buscar_obtos_mes(estado)
-            #print(dados)
         else:
             dados = self._busca.buscar_obtos_mes()
 
@@ -267,7 +266,6 @@ class Filtro:
     def calcula_infectados_estado(self, estado='Rio Grande Do Norte'):
         dados=[]
         infectados_estado=0
-        #print(dados)
         if(estado != 'Rio Grande Do Norte'):
             dados = self._busca.buscar_infectados_estado(estado)
         else:

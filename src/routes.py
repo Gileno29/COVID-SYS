@@ -18,10 +18,6 @@ autenticado=bool
 @app.route("/pacientes/all/info", methods=["GET"])
 def olaMundo():
     con = BuscaBD()
-    # result = con.buscar_paciente()
-    # print(result)
-   # y = json.dumps(con.buscar_paciente(), indent=4,
-    # sort_keys = True, default = myconverter)
     y = con.buscar_paciente()
 
     return jsonify(y)
@@ -32,8 +28,6 @@ def route_edit_user(id):
     id = id
     con = BuscaBD()
     result = con.buscar_paciente(id)
-    # msg = "You want to edit the user with ID: {} | Arg type: {}".format(
-    # id, type(id))
     print(result)
     return jsonify(result)
 
