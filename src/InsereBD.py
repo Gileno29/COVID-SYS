@@ -10,6 +10,7 @@ from entities.Endereco import Endereco
 from entities.Teste import Teste
 from datetime import datetime
 from TratarData import TratarData
+import threading 
 import random
 
 
@@ -20,38 +21,39 @@ class InsereBD(Thread):
         Thread.__init__(self)
         self._user = 'user-public-notificacoes'
         self._password = 'Za4qNXdyQNSa9YaA'
-        self._url = 'https://elasticsearch-saps.saude.gov.br/desc-notificacoes-esusve-*/_search?size=6000'
-        self._url = 'https://elasticsearch-saps.saude.gov.br/desc-notificacoes-esusve-*/_search?scroll=1m'
-        self._url2 = 'https://elasticsearch-saps.saude.gov.br/desc-notificacoes-esusve-*/_search?scroll -d'
-        self._dados = self.get_dados_service()
+        self._url = 'https://elasticsearch-saps.saude.gov.br/desc-notificacoes-esusve-*/_search?size=10000'
+        #self._dados = self.get_dados_service()
         self._con = Conexao.Conexao().conectar()
-        self._scroll_id = ''
+        self._i = 0
+        self._count=0
+        self._inserido=True
 
     def get_dados_service(self):
+        
+        post={
+        'size':10,
+        'from':self._i
+            }
+        request = requests.get(self._url, auth=(self._user, self._password), params=post)
+        dados = json.loads(request.text)
+        self._i= self._i + 10
+        if(self._i==100):
+            return print('Registros finalizados')
+        self.persistir(dados)
+       
 
-        request = requests.get(self._url, auth=(self._user, self._password))
-        self._dados = json.loads(request.text)
-        '''
-        for x in range(len(self._dados['hits']['hits'])):
-            print(self._dados['hits']['hits'][x]['_source']['resultadoTeste'])
-        print('atualizou', self.vezes)
-        '''
 
-        self.vezes = self.vezes+1
-        return self._dados
+        #self.vezes = self.vezes+1
+        #return self._dados
 
-    def run(self):
-        while(True):
-            self._dados = self.get_dados_service()
-            time.sleep(5)
+
 
     def get_dados(self):
         return self._dados
 
-    def persistir(self):
-        dados = self.get_dados_service()
-        self._scroll_id = dados['_scroll_id']
-
+    def persistir(self, dados):
+        dados = dados
+        
         self.constroi_objetos(dados)
 
     def constroi_objetos(self, dados_tratados):
@@ -118,6 +120,7 @@ class InsereBD(Thread):
             self.insert_dados(paciente, endereco, exame)
 
     def insert_dados(self, paciente=Paciente(), endereco_API=Endereco(), exame=Teste()):
+        
         cursor = self._con.cursor(buffered=True)
         query_insert = "INSERT INTO paciente(paciente_cbo, paciente_idade, paciente_sexo, paciente_fk_endid , paciente_profissional_de_saude, paciente_raca) VALUES(%s,%s,%s,%s,%s,%s);"
 
@@ -141,7 +144,10 @@ class InsereBD(Thread):
 
         else:
             print('QUERY EXECUTADA COM SUCESSO')
-
+            self._count=self._count +1
+            if(self._count==10):
+                self._count=0
+                self.get_dados_service()
     def insert_into_endereco(self, endereco=Endereco()):
         cursor = self._con.cursor(buffered=True)
 
@@ -198,16 +204,12 @@ class InsereBD(Thread):
             print('ERRO AO INSERIR TESTE')
         return last_id
 
-    '''
-    def randon(self):
-        number = random.randrange(0, 2)
-        if(number == 0):
-            return 'Morte'
-        else:
-            return'Curado'
-    '''
 
-    def iniciar(self):
+    '''def iniciar(self):
         while(True):
             self.persistir()
-            time.sleep(65)
+            time.sleep(65)'''
+
+i= InsereBD()
+t1 = threading.Thread(target=i.get_dados_service())  
+t1.start()
