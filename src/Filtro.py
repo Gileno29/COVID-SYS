@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from BuscaBD import BuscaBD
 from datetime import datetime
 

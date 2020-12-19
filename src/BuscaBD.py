@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from persistencia.conexao import Conexao
 import datetime
 
