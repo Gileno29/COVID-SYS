@@ -45,7 +45,7 @@ class BuscaBD:
                         'idade': paciente_result[3], 'profissional_de_saude': paciente_result[4],
                         'profissional_seguranca': paciente_result[5], 'raca': paciente_result[6],
                         'endereco': {'end_id': end_result[0], 'estado': end_result[1], 'muncipio': end_result[2]}, 
-                        'exame'{exame_result[1],exame_result[2]}}
+                        'exame':{exame_result[1],exame_result[2]}}
 
             return paciente
         else:
