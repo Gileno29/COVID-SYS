@@ -20,11 +20,12 @@ class BuscaBD:
 
         query_select_paciente = "SELECT p.paciente_id, p.paciente_cbo, p.paciente_sexo, p.paciente_idade, e.end_municipio, e.end_estado, ex.ex_dt_notificacao, ex.ex_dt_ini_sintomas, ex.ex_resultado  FROM endereco as e, paciente as p, exame as ex  where e.end_id= p.paciente_fk_endid AND ex. ex_fk_paciente_id=p.paciente_id;"
 
-        query_select_ALL = "SELECT p.paciente_id, p.paciente_cbo, p.paciente_sexo, p.paciente_idade,p.paciente_profissional_de_saude,p.paciente_raca, e.end_id, e.end_estado, e.end_municipio from paciente as p, endereco as e where p.paciente_fk_endid= e.end_id"
+        query_select_ALL = "SELECT p.paciente_id, p.paciente_cbo, p.paciente_sexo, p.paciente_idade,p.paciente_profissional_de_saude,p.paciente_raca, e.end_id, e.end_estado, e.end_municipio, ex.ex_id, ex.ex_resultado from paciente as p, endereco as e, exame as ex where p.paciente_fk_endid= e.end_id and ex.ex_id=p.paciente_id;"
 
+        query_busca_exame= "SELECT p.paciente_id , ex.ex_id,ex.ex_resultado from exame as ex, paciente as p where ex.ex_fk_paciente_id=p.paciente_id; "
         paciente = {'id': '', 'cbo': '', 'sexo': '', 'idade': 0,
                     'profissional_de_saude': '', 'profissional_seguranca': '',
-                    'raca': '', 'endereco': {'end_id': '', 'estado': '', 'municipio': ''}}
+                    'raca': '', 'endereco': {'end_id': '', 'estado': '', 'municipio': ''}, 'exame':{'id:':'','resultado':''}}
 
         paciente_result = []
         end_result = []
@@ -37,10 +38,14 @@ class BuscaBD:
             cursor.execute(query_select_end_by_id, val)
             end_result = cursor.fetchone()
 
+            cursor.execute(query_busca_exame, val)
+            exame_result=cursor.fetchone()
+
             paciente = {'id': paciente_result[0], 'cbo': paciente_result[1], 'sexo': paciente_result[2],
                         'idade': paciente_result[3], 'profissional_de_saude': paciente_result[4],
                         'profissional_seguranca': paciente_result[5], 'raca': paciente_result[6],
-                        'endereco': {'end_id': end_result[0], 'estado': end_result[1], 'muncipio': end_result[2]}}
+                        'endereco': {'end_id': end_result[0], 'estado': end_result[1], 'muncipio': end_result[2]}, 
+                        'exame'{exame_result[1],exame_result[2]}}
 
             return paciente
         else:
@@ -54,7 +59,8 @@ class BuscaBD:
                 #print(paciente_result)
                 p = {'id': paciente_result[x][0], 'cbo': paciente_result[x][1], 'sexo': paciente_result[x][2],
                      'idade': paciente_result[x][3], 'profissional_de_saude': paciente_result[x][4], 'raca': paciente_result[x][5],
-                     'end_id': paciente_result[x][6], 'estado': paciente_result[x][7], 'muncipio': paciente_result[x][8]}
+                     'end_id': paciente_result[x][6], 'estado': paciente_result[x][7], 'muncipio': paciente_result[x][8],
+                     'exame_id':paciente_result[x][9], 'exame_resultado':paciente_result[x][10]}
                 pacientes.append(p)
             return pacientes
 
@@ -111,8 +117,12 @@ class BuscaBD:
         query_select_paciente = ''
         result = []
         if(estado is not None):
-            estados = {'RN': 'Rio Grande Do Norte', 'AC': 'Acre'}
-            if(estado in estados):
+            estados = {'RN': 'Rio Grande Do Norte', 'AC': 'Acre','CE':'Ceará','AM':'Amazonas','PA':'Pará',
+            'RR':'Roraíma', 'RO':'Rondônia', 'AP':'Amapá', 'MT':'Mato Grosso', 'MS':'Mato Grosso Do Sul','TO':'Tocantins',
+            'GO':'Goiáis','MG':'Minas Gerais','MA':'Maranhão','PI':'Piauí','PB':'Paraíba', 'PE':'Pernambuco','AL':'Alagoas',
+            'SE':'Sergípe','BA':'Bahia','ES':'Espírito Santo','RJ':'Rio De Janeiro','SP':'São Paulo','PR':'Paraná','SC':'Santa Catarina',
+            'RS':'Rio Grande do Sul'}
+            if(estado.upper() in estados):
                 val = (estados[estado],)
                 query_select_paciente = "SELECT  p.paciente_sexo, ex.ex_evolucao_caso, ex_resultado, e.end_estado FROM  paciente as p, exame as ex, endereco as e  where ex.ex_fk_paciente_id = p.paciente_id and e.end_estado like %s and p.paciente_fk_endid = end_id limit 6000"
                 cursor.execute(query_select_paciente, val)
@@ -129,8 +139,12 @@ class BuscaBD:
         query_select_paciente = ''
         result = []
         if(estado is not None):
-            estados = {'RN': 'Rio Grande Do Norte', 'AC': 'Acre'}
-            if(estado in estados):
+            estados = {'RN': 'Rio Grande Do Norte', 'AC': 'Acre','CE':'Ceará','AM':'Amazonas','PA':'Pará',
+            'RR':'Roraíma', 'RO':'Rondônia', 'AP':'Amapá', 'MT':'Mato Grosso', 'MS':'Mato Grosso Do Sul','TO':'Tocantins',
+            'GO':'Goiáis','MG':'Minas Gerais','MA':'Maranhão','PI':'Piauí','PB':'Paraíba', 'PE':'Pernambuco','AL':'Alagoas',
+            'SE':'Sergípe','BA':'Bahia','ES':'Espírito Santo','RJ':'Rio De Janeiro','SP':'São Paulo','PR':'Paraná','SC':'Santa Catarina',
+            'RS':'Rio Grande do Sul'}
+            if(estado.upper() in estados):
                 
                 val = (estados[estado],)
                 query_select_paciente = "SELECT  p.paciente_sexo, ex.ex_sintomas, ex.ex_resultado, ex.ex_evolucao_caso, e.end_estado FROM  paciente as p, exame as ex, endereco as e  where ex. ex_fk_paciente_id=p.paciente_id and e.end_estado like %s and p.paciente_fk_endid = end_id limit 6000;"
@@ -154,8 +168,12 @@ class BuscaBD:
         query_select_paciente = ''
         result = []
         if(estado is not None):
-            estados = {'RN': 'Rio Grande Do Norte', 'AC': 'Acre'}
-            if(estado in estados):
+            estados = {'RN': 'Rio Grande Do Norte', 'AC': 'Acre','CE':'Ceará','AM':'Amazonas','PA':'Pará',
+            'RR':'Roraíma', 'RO':'Rondônia', 'AP':'Amapá', 'MT':'Mato Grosso', 'MS':'Mato Grosso Do Sul','TO':'Tocantins',
+            'GO':'Goiáis','MG':'Minas Gerais','MA':'Maranhão','PI':'Piauí','PB':'Paraíba', 'PE':'Pernambuco','AL':'Alagoas',
+            'SE':'Sergípe','BA':'Bahia','ES':'Espírito Santo','RJ':'Rio De Janeiro','SP':'São Paulo','PR':'Paraná','SC':'Santa Catarina',
+            'RS':'Rio Grande do Sul'}
+            if(estado.upper() in estados):
                 val = (estados[estado],)
                 query_select_paciente = "SELECT  p.paciente_idade, ex.ex_evolucao_caso, ex_resultado, e.end_estado FROM  paciente as p, exame as ex, endereco as e  where ex.ex_fk_paciente_id = p.paciente_id and e.end_estado like %s and p.paciente_fk_endid = end_id limit 6000"
                 cursor.execute(query_select_paciente, val)
@@ -192,8 +210,11 @@ class BuscaBD:
         val=(estado,)
         result=[]
         if(estado!='Rio Grande Do Norte'):
-                estados = {'RN': 'Rio Grande Do Norte',
-                       'AC': 'Acre', 'SP': 'Sao Paulo', 'PB': 'Paraiba'}
+                estados = {'RN': 'Rio Grande Do Norte', 'AC': 'Acre','CE':'Ceará','AM':'Amazonas','PA':'Pará',
+            'RR':'Roraíma', 'RO':'Rondônia', 'AP':'Amapá', 'MT':'Mato Grosso', 'MS':'Mato Grosso Do Sul','TO':'Tocantins',
+            'GO':'Goiáis','MG':'Minas Gerais','MA':'Maranhão','PI':'Piauí','PB':'Paraíba', 'PE':'Pernambuco','AL':'Alagoas',
+            'SE':'Sergípe','BA':'Bahia','ES':'Espírito Santo','RJ':'Rio De Janeiro','SP':'São Paulo','PR':'Paraná','SC':'Santa Catarina',
+            'RS':'Rio Grande do Sul'}
                 if(estado in estados):
                     val = (estados[estado],)
                     query = "SELECT  p.paciente_id, ex.ex_evolucao_caso, ex.ex_resultado, ex.ex_dt_encerramento, p.paciente_id, e.end_estado FROM  paciente as p, exame as ex, endereco as e  where ex.ex_fk_paciente_id = p.paciente_id and e.end_estado like %s and p.paciente_fk_endid = end_id; "
@@ -214,9 +235,12 @@ class BuscaBD:
         val=(estado,)
         result=[]
         if(estado!='Rio Grande Do Norte'):
-                estados = {'RN': 'Rio Grande Do Norte',
-                       'AC': 'Acre', 'SP': 'Sao Paulo', 'PB': 'Paraiba'}
-                if(estado in estados):
+                estados = {'RN': 'Rio Grande Do Norte', 'AC': 'Acre','CE':'Ceará','AM':'Amazonas','PA':'Pará',
+            'RR':'Roraíma', 'RO':'Rondônia', 'AP':'Amapá', 'MT':'Mato Grosso', 'MS':'Mato Grosso Do Sul','TO':'Tocantins',
+            'GO':'Goiáis','MG':'Minas Gerais','MA':'Maranhão','PI':'Piauí','PB':'Paraíba', 'PE':'Pernambuco','AL':'Alagoas',
+            'SE':'Sergípe','BA':'Bahia','ES':'Espírito Santo','RJ':'Rio De Janeiro','SP':'São Paulo','PR':'Paraná','SC':'Santa Catarina',
+            'RS':'Rio Grande do Sul'}
+                if(estado.upper() in estados):
                     val = (estados[estado],)
                     query = "SELECT  p.paciente_id, ex.ex_evolucao_caso, ex.ex_resultado, ex.ex_dt_encerramento, p.paciente_id, e.end_estado FROM  paciente as p, exame as ex, endereco as e  where ex.ex_fk_paciente_id = p.paciente_id and e.end_estado like %s and p.paciente_fk_endid = end_id; "
                     cursor.execute(query, val)
@@ -233,9 +257,12 @@ class BuscaBD:
         cursor = conect.cursor(buffered=True)
         result = []
         if(estado is not None):
-            estados = {'RN': 'Rio Grande Do Norte',
-                       'AC': 'Acre', 'SP': 'Sao Paulo', 'PB': 'Paraiba'}
-            if(estado in estados):
+            estados = {'RN': 'Rio Grande Do Norte', 'AC': 'Acre','CE':'Ceará','AM':'Amazonas','PA':'Pará',
+            'RR':'Roraíma', 'RO':'Rondônia', 'AP':'Amapá', 'MT':'Mato Grosso', 'MS':'Mato Grosso Do Sul','TO':'Tocantins',
+            'GO':'Goiáis','MG':'Minas Gerais','MA':'Maranhão','PI':'Piauí','PB':'Paraíba', 'PE':'Pernambuco','AL':'Alagoas',
+            'SE':'Sergípe','BA':'Bahia','ES':'Espírito Santo','RJ':'Rio De Janeiro','SP':'São Paulo','PR':'Paraná','SC':'Santa Catarina',
+            'RS':'Rio Grande do Sul'}
+            if(estado.upper() in estados):
                 val = (estados[estado],)
                 query = "SELECT  ex.ex_resultado, ex.ex_evolucao_caso, ex.ex_dt_encerramento, p.paciente_id, e.end_estado FROM  paciente as p, exame as ex, endereco as e  where ex.ex_fk_paciente_id = p.paciente_id and e.end_estado like %s and p.paciente_fk_endid = end_id; "
                 cursor.execute(query, val)
@@ -253,8 +280,11 @@ class BuscaBD:
         cursor = conect.cursor(buffered=True)
         result = []
         if(estado is not None):
-            estados = {'RN': 'Rio Grande Do Norte',
-                       'AC': 'Acre', 'SP': 'Sao Paulo', 'PB': 'Paraiba'}
+            estados = {'RN': 'Rio Grande Do Norte', 'AC': 'Acre','CE':'Ceará','AM':'Amazonas','PA':'Pará',
+            'RR':'Roraíma', 'RO':'Rondônia', 'AP':'Amapá', 'MT':'Mato Grosso', 'MS':'Mato Grosso Do Sul','TO':'Tocantins',
+            'GO':'Goiáis','MG':'Minas Gerais','MA':'Maranhão','PI':'Piauí','PB':'Paraíba', 'PE':'Pernambuco','AL':'Alagoas',
+            'SE':'Sergípe','BA':'Bahia','ES':'Espírito Santo','RJ':'Rio De Janeiro','SP':'São Paulo','PR':'Paraná','SC':'Santa Catarina',
+            'RS':'Rio Grande do Sul'}
             if(estado in estados):
                 val = (estados[estado],)
                 query = "SELECT  p.paciente_raca,  ex.ex_resultado, ex.ex_evolucao_caso, e.end_estado FROM  paciente as p, exame as ex, endereco as e  where ex.ex_fk_paciente_id = p.paciente_id and e.end_estado like %s and p.paciente_fk_endid = end_id; "
@@ -269,4 +299,4 @@ class BuscaBD:
 
 
 con = BuscaBD()
-con.buscar_paciente(10)
+con.buscar_infectados_estado()

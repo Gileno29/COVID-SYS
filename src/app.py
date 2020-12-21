@@ -12,7 +12,7 @@ import json
 
 app = Flask(__name__)
 
-sys.path.append('/home/gileno/venv-API/lib/python3.8/site-packages')
+sys.path.append('/home/gileno/projetos/src/venv-API/lib/python3.8/site-packages')
 user = ''
 user_name=''
 autenticado=bool
@@ -48,6 +48,7 @@ def index():
     dados_raca = f.calcula_obtos_raca()
     infectados_estado= f.calcula_infectados_estado()
     obitos=f.quantidade_obtos()
+    print(dados_por_mes)
     obitos_estado= f.calcula_obtos_estado()
     return render_template('segtela.html', mulher=dados_sexo['mulher'], homem=dados_sexo['homem'],
                            febre=dados_sintomas['febre'], dor_garganta=dados_sintomas['dor_garganta'],
@@ -79,6 +80,7 @@ def dados_estado():
         #print('dados por mês ',dados_por_mes )
         dados_raca = f.calcula_obtos_raca(estado)
         infectados_estado= f.calcula_infectados_estado(estado)
+        #print(infectados_estado)
         infectados = f.quantidade_infectados()
         obitos=f.quantidade_obtos()
         obitos_estado= f.calcula_obtos_estado(estado)
@@ -132,4 +134,4 @@ def myconverter(o):
     return o.__str__()
 
 if __name__ == "__main__":
-   app.run(debug=True, port=4000)
+   app.run(debug=True, port=4000, host='172.16.255.130')

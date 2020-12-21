@@ -21,7 +21,7 @@ class InsereBD(Thread):
         Thread.__init__(self)
         self._user = 'user-public-notificacoes'
         self._password = 'Za4qNXdyQNSa9YaA'
-        self._url = 'https://elasticsearch-saps.saude.gov.br/desc-notificacoes-esusve-*/_search?size=10000'
+        self._url = 'https://elasticsearch-saps.saude.gov.br/desc-notificacoes-esusve-pb/_search?size=10000'
         #self._dados = self.get_dados_service()
         self._con = Conexao.Conexao().conectar()
         self._i = 0
@@ -31,13 +31,13 @@ class InsereBD(Thread):
     def get_dados_service(self):
         
         post={
-        'size':10,
+        'size':10000,
         'from':self._i
             }
         request = requests.get(self._url, auth=(self._user, self._password), params=post)
         dados = json.loads(request.text)
-        self._i= self._i + 10
-        if(self._i==100):
+        self._i= self._i + 10000
+        if(self._i==1000000):
             return print('Registros finalizados')
         self.persistir(dados)
        
@@ -145,7 +145,7 @@ class InsereBD(Thread):
         else:
             print('QUERY EXECUTADA COM SUCESSO')
             self._count=self._count +1
-            if(self._count==10):
+            if(self._count==10000):
                 self._count=0
                 self.get_dados_service()
     def insert_into_endereco(self, endereco=Endereco()):

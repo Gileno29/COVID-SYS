@@ -1,6 +1,7 @@
 
     function grafico_mortalidade_sintomas(febre, tosse, garganta, dispineia, outros){  
         var Line = document.getElementById("sintomas");
+        console.log('A funcao foi carregada')
         var chartDataSintomas = {
         labels: ["Febre","Dor de Garganta", "Tosse", "Dispineia", "Outros"],
         datasets: [{

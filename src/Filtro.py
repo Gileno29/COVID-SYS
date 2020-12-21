@@ -51,7 +51,8 @@ class Filtro:
             dados = self._busca.buscar_obtos_sintomas()
         for x in range(len(dados)):
             if(dados[x][2] == "Positivo" and dados[x][3] == "Óbito"):
-                dados_novos = dados[x][1].split(",")
+                str1= str(dados[x][1])
+                dados_novos = str1.split(",")
 
                 if("Dor de Garganta" in dados_novos):
                     dor_garganta = dor_garganta + 1
@@ -269,11 +270,13 @@ class Filtro:
         infectados_estado=0
         if(estado != 'Rio Grande Do Norte'):
             dados = self._busca.buscar_infectados_estado(estado)
+            
         else:
             dados = self._busca.buscar_infectados_estado()
         for x in range(len(dados)):
 
             if(dados[x][2] == "Positivo"):
+                print('entrei :', infectados_estado)
                 infectados_estado=infectados_estado + 1
         total={'infectados_estado':infectados_estado}
 
@@ -296,4 +299,5 @@ class Filtro:
         
 f = Filtro()
 
-f.calcula_infectados_estado()
+res=f.calcula_infectados_estado('AC')
+
